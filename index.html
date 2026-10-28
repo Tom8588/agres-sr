@@ -226,6 +226,14 @@ nav.tabs button[aria-current="page"]{color:var(--accent);font-weight:700}
 .lb .stage.zoom img{max-width:none;width:220%}
 .lb .cap{padding:12px max(16px,env(safe-area-inset-left,0px));font-size:15px;line-height:1.45;max-height:30vh;overflow:auto;border-top:1px solid rgba(255,255,255,.15)}
 .lb .cap .src{color:#cfd6de;border-color:rgba(255,255,255,.3)}
+.phbar{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+.iph:empty{display:none}
+.iph.top{display:block}
+.mini{display:flex;gap:8px;overflow-x:auto;margin:8px 0 4px;padding-bottom:4px;-webkit-overflow-scrolling:touch}
+.mini button{all:unset;cursor:pointer;flex:none;height:150px;max-width:88%;border-radius:8px;overflow:hidden;border:1px solid var(--line);background:var(--surface2)}
+.mini button:focus-visible{outline:3px solid var(--mark)}
+.mini img{height:100%;width:auto;max-width:100%;object-fit:cover;display:block}
+.iph.top .mini button{height:190px}
 /* Lexique et acronymes */
 .acr{border-bottom:1.5px dotted var(--muted);cursor:help}
 .lex{border:1px solid var(--line);border-radius:var(--r);overflow:hidden;background:var(--surface)}
@@ -1625,8 +1633,8 @@ function vFiche(id){
   let html = `<div class="backbar"><button class="btn ghost" data-act="back-fiches"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 6l-6 6 6 6"/></svg>Fiches</button><span class="pill">${esc(CHAP[f.ch])}</span></div>
   <article class="fiche card"><span class="src">${esc(f.src)}</span><h2>${esc(f.t)}</h2><p class="cle"><span class="mark">${f.cle}</span></p></article>`;
   const pm = (typeof PHOTOMAN!=="undefined") && PHOTOMAN[f.id];
-  if(pm && pm.n) html += `<section class="gal" id="gal" data-f="${f.id}"><div class="hd"><h3 style="font-size:21px">Photos du référentiel</h3><span class="pill">${pm.n} photos · FT p. ${pm.pages[0]}-${pm.pages[1]}</span></div><div class="gal-load">Chargement des photos…</div></section>`;
-  f.b.forEach(([h,items])=>{ html += `<section class="card blk"><h3>${esc(h)}</h3><ul>${items.map(i=>`<li>${i}</li>`).join("")}</ul></section>`; });
+  if(pm && pm.n) html += `<div class="phbar" id="gal" data-f="${f.id}"><span class="pill" id="phstate">Chargement des ${pm.n} photos…</span><button class="btn ghost" data-act="allph" style="min-height:36px;padding:4px 10px">Toutes les photos</button></div><div class="iph top" data-b="top"></div>`;
+  f.b.forEach(([h,items],bi)=>{ html += `<section class="card blk"><h3>${esc(h)}</h3><ul>${items.map((i,ii)=>`<li>${i}<div class="iph" data-b="${bi}.${ii}"></div></li>`).join("")}</ul></section>`; });
   if(f.o.length){
     html += `<section class="ordres"><div class="hd"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M7 4h10v16H7z"/><path d="M10 8h4M10 12h4"/><path d="M12 1v3"/></svg>Ordres du CA, exemples</div>${f.o.map(o=>`<p>${esc(o)}</p>`).join("")}<small>Formulations proposées pour t’entraîner à commander. Adapte-les aux conventions de ton CIS et de ton formateur.</small></section>`;
   }
@@ -1843,13 +1851,20 @@ function loadGallery(fid){
   const box = $("#gal"); if(!box) return;
   const show = items => {
     const g = $("#gal"); if(!g || g.dataset.f!==fid) return;
-    const strip = `<div class="strip">${items.map((it,i)=>`<button data-ph="${i}" aria-label="Agrandir la photo ${i+1}"><span class="ph"><img src="${it.d}" alt="" loading="lazy" width="${it.w}" height="${it.h}"></span><span class="cp">${esc(it.c||"Photo de la fiche technique")}</span><span class="pg">page ${it.p} · ${i+1}/${items.length}</span></button>`).join("")}</div><p class="muted" style="font-size:13px;margin:0">Fais défiler, touche une photo pour l’agrandir et voir la page entière.</p>`;
-    g.querySelector(".gal-load") ? g.querySelector(".gal-load").outerHTML = strip : null;
-    g.querySelectorAll("[data-ph]").forEach(b=>b.onclick=()=>openLb(items,+b.dataset.ph));
+    const groups = {};
+    items.forEach((it,i)=>{ (groups[it.b||"top"] = groups[it.b||"top"] || []).push(i); });
+    document.querySelectorAll(".iph").forEach(c=>{
+      const ids = groups[c.dataset.b]; if(!ids) return;
+      if(!document.querySelector(`.blk .iph[data-b="${c.dataset.b}"]`) && c.dataset.b!=="top") return;
+      c.innerHTML = (c.dataset.b==="top"?`<div class="eyebrow" style="margin-bottom:6px">En un coup d’œil</div>`:"") + `<div class="mini">${ids.map(i=>{ const it=items[i]; return `<button data-ph="${i}" aria-label="Agrandir la photo, page ${it.p}"><img src="${it.d}" alt="" loading="lazy" width="${it.w}" height="${it.h}"></button>`; }).join("")}</div>`;
+    });
+    // photos rattachées à une étape absente : en tête
+    const st=$("#phstate"); if(st) st.textContent = items.length+" photos placées sous les étapes · touche pour agrandir";
+    document.querySelectorAll("[data-ph]").forEach(b=>b.onclick=()=>openLb(items,+b.dataset.ph));
   };
   if(GAL[fid]) return show(GAL[fid]);
   fetch("photos/"+fid+".json").then(r=>{ if(!r.ok) throw 0; return r.json(); }).then(j=>{ GAL[fid]=j; show(j); })
-   .catch(()=>{ const l=$("#gal .gal-load"); if(l) l.textContent="Photos indisponibles hors connexion. Ouvre cette fiche une fois avec du réseau pour les garder."; });
+   .catch(()=>{ const l=$("#phstate"); if(l) l.textContent="Photos indisponibles sans réseau"; });
 }
 let LB=null;
 function openLb(items,i){ LB={items,i,page:false,zoom:false}; drawLb(); }
@@ -1964,6 +1979,7 @@ function act(a){
     case "flip": cur.flip=!cur.flip; render(); break;
     case "deck-yes": if(!cur.failed.includes(cur.deck[cur.di])) cur.known++; cur.di++; cur.flip=false; render(); break;
     case "deck-no": if(!cur.failed.includes(cur.deck[cur.di])) cur.failed.push(cur.deck[cur.di]); cur.deck.push(cur.deck[cur.di]); cur.di++; cur.flip=false; render(); break;
+    case "allph": if(cur.id && GAL[cur.id]) openLb(GAL[cur.id],0); break;
     case "deck-again": cur.deck=null; render(); break;
   }
 }

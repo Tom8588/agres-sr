@@ -59,8 +59,8 @@ main .wrap{padding-block:18px;display:flex;flex-direction:column;gap:18px}
 
 /* Navigation basse */
 nav.tabs{position:fixed;left:0;right:0;bottom:0;z-index:9;background:var(--surface);border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom,0px);padding-left:env(safe-area-inset-left,0px);padding-right:env(safe-area-inset-right,0px)}
-nav.tabs .in{max-width:760px;margin:0 auto;display:grid;grid-template-columns:repeat(5,1fr)}
-nav.tabs button{background:none;border:0;padding:8px 2px 9px;display:flex;flex-direction:column;align-items:center;gap:3px;font-size:12px;color:var(--muted);letter-spacing:.02em}
+nav.tabs .in{max-width:760px;margin:0 auto;display:grid;grid-template-columns:repeat(6,1fr)}
+nav.tabs button{background:none;border:0;padding:8px 0 9px;display:flex;flex-direction:column;align-items:center;gap:3px;font-size:11px;color:var(--muted);letter-spacing:.02em}
 nav.tabs button svg{width:22px;height:22px}
 nav.tabs button[aria-current="page"]{color:var(--accent);font-weight:700}
 
@@ -205,6 +205,38 @@ nav.tabs button[aria-current="page"]{color:var(--accent);font-weight:700}
 .empty{padding:22px;text-align:center;color:var(--muted)}
 .toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(90px + env(safe-area-inset-bottom,0px));background:var(--ink);color:var(--surface);padding:10px 14px;border-radius:8px;font-size:14px;z-index:20}
 
+
+/* Photos du référentiel */
+.gal{display:flex;flex-direction:column;gap:10px}
+.gal .hd{display:flex;justify-content:space-between;align-items:baseline;gap:10px}
+.strip{display:flex;gap:10px;overflow-x:auto;scroll-snap-type:x mandatory;padding-bottom:6px;-webkit-overflow-scrolling:touch}
+.strip button{all:unset;cursor:pointer;flex:none;width:min(72vw,300px);scroll-snap-align:start;background:var(--surface);border:1px solid var(--line);border-radius:9px;overflow:hidden;display:flex;flex-direction:column}
+.strip button:focus-visible{outline:3px solid var(--mark)}
+.strip .ph{height:190px;background:var(--surface2);display:grid;place-items:center;overflow:hidden}
+.strip img{width:100%;height:100%;object-fit:cover}
+.strip .cp{font-size:13px;padding:8px 10px;color:var(--ink);display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;min-height:3.2em}
+.strip .pg{font-family:var(--f-mono);font-size:11px;color:var(--muted);padding:0 10px 8px}
+.gal-load{padding:30px;text-align:center;color:var(--muted);background:var(--surface);border:1px dashed var(--line);border-radius:9px}
+.lb{position:fixed;inset:0;z-index:30;background:#0B0D10;color:#EEF1F4;display:flex;flex-direction:column;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+.lb .bar{display:flex;align-items:center;gap:8px;padding:10px max(12px,env(safe-area-inset-right,0px)) 10px max(12px,env(safe-area-inset-left,0px))}
+.lb .bar button{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);color:#fff;border-radius:8px;min-height:42px;min-width:42px;padding:6px 12px;font-weight:700}
+.lb .bar .sp{flex:1;font-family:var(--f-mono);font-size:13px;opacity:.8;text-align:center}
+.lb .stage{flex:1;overflow:auto;display:flex;align-items:flex-start;justify-content:center;touch-action:pan-x pan-y pinch-zoom}
+.lb .stage img{max-width:100%;height:auto;margin:auto;display:block}
+.lb .stage.zoom img{max-width:none;width:220%}
+.lb .cap{padding:12px max(16px,env(safe-area-inset-left,0px));font-size:15px;line-height:1.45;max-height:30vh;overflow:auto;border-top:1px solid rgba(255,255,255,.15)}
+.lb .cap .src{color:#cfd6de;border-color:rgba(255,255,255,.3)}
+/* Lexique et acronymes */
+.acr{border-bottom:1.5px dotted var(--muted);cursor:help}
+.lex{border:1px solid var(--line);border-radius:var(--r);overflow:hidden;background:var(--surface)}
+.lex .li{display:grid;grid-template-columns:minmax(80px,30%) minmax(0,1fr);gap:12px;padding:11px 14px;border-top:1px solid var(--line);font-size:15px}
+.lex .li:first-child{border-top:0}
+.lex .li b{font-family:var(--f-display);font-size:19px;line-height:1.2;word-break:break-word}
+.lex .letter{font-family:var(--f-display);font-weight:700;font-size:15px;padding:6px 14px;background:var(--surface2);border-top:1px solid var(--line);color:var(--muted)}
+.lex .letter:first-child{border-top:0}
+.pop{position:fixed;left:max(12px,env(safe-area-inset-left,0px));right:max(12px,env(safe-area-inset-right,0px));bottom:calc(76px + env(safe-area-inset-bottom,0px));z-index:25;max-width:640px;margin:0 auto;background:var(--ink);color:var(--surface);border-radius:10px;padding:12px 14px;font-size:15px;box-shadow:0 8px 24px rgba(0,0,0,.25)}
+.pop b{font-family:var(--f-display);font-size:19px;margin-right:6px}
+
 @media (min-width:640px){
   .filters{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}
   .case-list{grid-template-columns:1fr 1fr}
@@ -227,6 +259,7 @@ nav.tabs button[aria-current="page"]{color:var(--accent);font-weight:700}
   <button data-tab="quiz"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M9.5 9a2.5 2.5 0 1 1 3.5 2.3c-.7.3-1 .9-1 1.7v.5"/><path d="M12 17h.01"/></svg>Quiz</button>
   <button data-tab="cas"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 16l2-6a2 2 0 0 1 2-1.4h10A2 2 0 0 1 19 10l2 6v3h-3v-2H6v2H3z"/><circle cx="7.5" cy="14" r="1"/><circle cx="16.5" cy="14" r="1"/></svg>Cas</button>
   <button data-tab="chiffres"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 12h18"/><path d="M8 8.5h2M14 8.5h2M8 15.5h3M14 15.5h3"/></svg>Chiffres</button>
+  <button data-tab="lexique"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19V5a2 2 0 0 1 2-2h13v16H6a2 2 0 0 0-2 2"/><path d="M8 7h7M8 11h5"/><path d="M19 19v2H6"/></svg>Lexique</button>
 </div></nav>
 
 <script>
@@ -1267,6 +1300,166 @@ const CHIFFRES = [
  ["30 km/h · 20 m","Tunnel, contre-sens des secours : vitesse · interdistance","GDO"]
 ];
 
+/* Lexique : [terme, développé / définition, catégorie]. a = acronyme ; t = terme technique */
+const LEXIQUE = [
+ ["2D","Découper, Dégager : les deux temps de la sortie de la victime (FRO 51).","a"],
+ ["3D","Dégarnir, Dessiner, Distance : la sécurisation des techniques (FRO 51).","a"],
+ ["5S","Sécurisation du site, Sécurisation et Stabilisation du véhicule, Secours d’urgence aux personnes, Sécurisation des techniques, Sortie de la victime : la MGO SR.","a"],
+ ["5i","Identifier, Inspecter, Interdire, Immobiliser, Isoler : la sécurisation du véhicule.","a"],
+ ["ABS","Anti-blocage des roues (anti blocage system). Sécurité active.","a"],
+ ["ACT","Attelle cervico-thoracique (type attelle d’extraction). Avec le collier cervical, elle préserve l’axe tête-cou-tronc en sortie latérale.","a"],
+ ["ADR","Accord européen relatif au transport international des marchandises dangereuses par route.","a"],
+ ["AEB","Freinage automatique d’urgence (automatic emergency braking).","a"],
+ ["AFIL","Alerte de franchissement involontaire de ligne.","a"],
+ ["AFU","Aide au freinage d’urgence.","a"],
+ ["ARI","Appareil respiratoire isolant.","a"],
+ ["AVP","Accident de la voie publique.","a"],
+ ["BAU","Bande d’arrêt d’urgence.","a"],
+ ["BAT","Marquage « batterie » : position de la ou des batteries indiquée par le CA sur la carrosserie (charte graphique SDIS 88).","a"],
+ ["BHNS","Bus à haut niveau de service (« trambus »).","a"],
+ ["BLEVE","Boiling Liquid Expanding Vapour Explosion : éclatement d’un réservoir de gaz liquéfié chauffé (GPL, GNL), avec boule de feu, éclats et surpression.","a"],
+ ["BMPM","Bataillon de marins-pompiers de Marseille.","a"],
+ ["BSPP","Brigade de sapeurs-pompiers de Paris.","a"],
+ ["CA","Chef d’agrès. CA SR : chef d’agrès secours routier (niveau SR3).","a"],
+ ["CETU","Centre d’études des tunnels.","a"],
+ ["CFRP","Plastique renforcé de fibres de carbone. Découpe : masque FFP3 (FRO 50).","a"],
+ ["CGOS","Commandement général des opérations de secours (tunnel binational).","a"],
+ ["CIS","Centre d’incendie et de secours.","a"],
+ ["CLP","Règlement européen classification, étiquetage, emballage des produits chimiques.","a"],
+ ["CNG","Compressed natural gas : GNC en anglais (logo carburant).","a"],
+ ["CODIS","Centre opérationnel départemental d’incendie et de secours.","a"],
+ ["COS","Commandant des opérations de secours.","a"],
+ ["CTA","Centre de traitement de l’alerte (reçoit les appels 18/112).","a"],
+ ["CTRA","Centre de traitement de l’alerte, appellation utilisée dans le référentiel du SDIS 88 (couplé au CODIS).","a"],
+ ["DDPP","Direction départementale de la protection des populations (animaux).","a"],
+ ["DGSCGC","Direction générale de la sécurité civile et de la gestion des crises (auteur du GDO).","a"],
+ ["DIR","Direction interdépartementale des routes (réseau national non concédé).","a"],
+ ["DOS","Directeur des opérations de secours (maire ou préfet).","a"],
+ ["DREAL","Direction régionale de l’environnement, de l’aménagement et du logement.","a"],
+ ["DU","Dégagement d’urgence : sortie immédiate face à un danger réel, vital, immédiat et non contrôlable.","a"],
+ ["ECE R43","Règlement européen sur les vitrages automobiles (marquage du verre).","a"],
+ ["eCall","Appel d’urgence automatique ou manuel du véhicule (eCall 112 obligatoire depuis 2018 sur les nouveaux modèles).","a"],
+ ["ECU","Electronic control unit : calculateur qui commande airbags et prétensionneurs.","a"],
+ ["EDPM","Engin de déplacement personnel motorisé (trottinette électrique, gyropode…).","a"],
+ ["EES","Energy equivalent speed : vitesse contre un obstacle fixe indéformable qui donnerait les mêmes déformations.","a"],
+ ["EL","Marquage SDIS 88 : véhicule électrique. Sur la carte grise, EL = électricité.","a"],
+ ["EMAG","Esters méthyliques d’acides gras (biocarburant du gazole).","a"],
+ ["EPI","Équipement de protection individuelle.","a"],
+ ["ERG","Emergency response guide : guide d’intervention d’urgence du constructeur, plus détaillé que la FAD.","a"],
+ ["ES","Marquage GDO : essence. Carte grise : ES = essence.","a"],
+ ["ESS","Marquage SDIS 88 : essence.","a"],
+ ["ESP","Contrôle électronique de trajectoire.","a"],
+ ["ETARE","Établissement répertorié (plan d’intervention préétabli).","a"],
+ ["EV","Electric vehicle : véhicule électrique.","a"],
+ ["FAD","Fiche d’aide à la décision (au maximum 4 pages, norme ISO 17840) : énergies, renforts, airbags, batteries, zones interdites d’un modèle de véhicule.","a"],
+ ["FCV","Fuel cell vehicle : véhicule à pile à combustible (hydrogène).","a"],
+ ["FDO","Forces de l’ordre (police, gendarmerie).","a"],
+ ["FFP2","Masque filtrant de protection, classe 2. Minimum préconisé par le GDO pour la découpe des vitrages.","a"],
+ ["FFP3","Masque filtrant de protection, classe 3 (la plus filtrante). Obligatoire selon la FRO 50 pour la découpe des vitrages et du carbone, sauveteurs et victimes.","a"],
+ ["FLU","Flèche lumineuse d’urgence : grande flèche lumineuse orange montée à l’arrière d’un véhicule (souvent sur le toit), qui indique aux usagers de changer de voie. Uniquement sur routes à chaussées séparées ; jamais plus de 2 FLU en même temps sur un chantier.","a"],
+ ["FMPA","Formation de maintien et de perfectionnement des acquis.","a"],
+ ["FPT","Fourgon pompe-tonne.","a"],
+ ["FRO","Fiche réflexe opérationnelle (SDIS 88). FRO 50 : sécurité en SR. FRO 51 : MGO SR.","a"],
+ ["FT","Fiche technique (fiches du référentiel SR : FT 3.1, FT 4.4…).","a"],
+ ["GDO","Guide de doctrine opérationnelle (national, DGSCGC). Ici : « Opérations de secours en milieu routier », 2025.","a"],
+ ["GH / GL","Carte grise : gazole-électricité non rechargeable / rechargeable.","a"],
+ ["GN","Carte grise : gaz naturel (GNC ou GNL).","a"],
+ ["GNC","Gaz naturel comprimé (200-250 bar).","a"],
+ ["GNL","Gaz naturel liquéfié (-160 °C).","a"],
+ ["GNV","Gaz naturel pour véhicules (regroupe GNC et GNL).","a"],
+ ["GO","Gazole (marquage et carte grise).","a"],
+ ["GPL","Gaz de pétrole liquéfié (propane/butane). GPL-c : GPL carburant.","a"],
+ ["GTO","Guide de techniques opérationnelles.","a"],
+ ["H2","Hydrogène. Carte grise H2 = moteur thermique à hydrogène.","a"],
+ ["HE","Marquage SDIS 88 : hybride électrique. Carte grise HE : hydrogène-électricité rechargeable.","a"],
+ ["HEV","Hybrid electric vehicle : hybride non rechargeable.","a"],
+ ["HH","Carte grise : hydrogène-électricité non rechargeable (pile à combustible).","a"],
+ ["HLE / THLE / UHLE","Aciers à haute, très haute, ultra haute limite élastique (7 à 10 fois plus résistants qu’un acier doux).","a"],
+ ["HT","Haute tension (câbles orange, jusqu’à 800 V).","a"],
+ ["HV","Haute visibilité (chasuble).","a"],
+ ["HY","Marquage GDO : hybride.","a"],
+ ["IRVE","Infrastructure de recharge pour véhicules électriques (bornes).","a"],
+ ["ISO 17840","Norme des FAD, des ERG et des pictogrammes d’énergie de propulsion.","a"],
+ ["LIE","Limite inférieure d’explosivité (4 % pour l’hydrogène).","a"],
+ ["LMP","Lithium-métal-polymère : batterie qui brûle très violemment (pas d’eau en feu développé).","a"],
+ ["LNG / LPG","Liquefied natural gas (GNL) / liquefied petroleum gas (GPL) : logos carburant.","a"],
+ ["MGO","Marche générale des opérations. MGO SR : les 5S.","a"],
+ ["MSD","Minimum set of data : données envoyées par l’eCall (VIN, énergie, position, direction…).","a"],
+ ["Ni-MH","Batterie nickel-métal hydrure (anciens hybrides).","a"],
+ ["OFD","Outil de forcement, cité avec le Halligan dans le référentiel pour créer un espace (le sigle n’est pas développé dans tes documents).","a"],
+ ["ONU (n°)","Numéro à 4 chiffres en bas de la plaque orange, qui identifie la matière transportée.","a"],
+ ["PAU","Poste d’appel d’urgence (autoroutes, tunnels).","a"],
+ ["PC","Plan complet : sortie de la victime dans l’axe 0° du bassin, plus long, sécurité maximale.","a"],
+ ["PHEV","Plug-in hybrid electric vehicle : hybride rechargeable.","a"],
+ ["PK","Point kilométrique.","a"],
+ ["PL","Poids lourd (PTAC > 3,5 t).","a"],
+ ["PMR","Personne à mobilité réduite.","a"],
+ ["PMV","Panneau à message variable.","a"],
+ ["PSAP","Public safety answering point : centre de réception des appels d’urgence (eCall).","a"],
+ ["PSE","Premiers secours en équipe (recommandations de secourisme).","a"],
+ ["PTAC","Poids total autorisé en charge.","a"],
+ ["PU","Plan d’urgence : sortie rapide réalisable à tout moment si la victime s’aggrave.","a"],
+ ["QL","Quantités limitées (régime TMD allégé).","a"],
+ ["RCH","Risques chimiques (équipe spécialisée).","a"],
+ ["ROPS","Roll over protection system : arceaux qui se déploient (cabriolets).","a"],
+ ["SAMU","Service d’aide médicale urgente.","a"],
+ ["SDIS","Service départemental d’incendie et de secours.","a"],
+ ["SIS","Service d’incendie et de secours.","a"],
+ ["SMUR","Structure mobile d’urgence et de réanimation (équipe médicale).","a"],
+ ["SP","Sapeur-pompier.","a"],
+ ["SR","Secours routier. SR2 : équipier SR. SR3 : chef d’agrès SR.","a"],
+ ["SUAP","Secours d’urgence aux personnes (aussi SSUAP : secours et soins d’urgence aux personnes).","a"],
+ ["TC","Transport en commun (bus, car).","a"],
+ ["TdB","Tableau de bord.","a"],
+ ["TMD","Transport de matières dangereuses.","a"],
+ ["TPC","Terre-plein central.","a"],
+ ["TPRD","Thermal pressure relief device : soupape thermique qui vide un réservoir de gaz (GNC, H2) vers 110 °C.","a"],
+ ["TSI","Tenue de service et d’intervention (TSI/F1 : tenue de travail des personnels SUAP, manches baissées).","a"],
+ ["USAR","Urban search and rescue : sauvetage-déblaiement.","a"],
+ ["VBU","Véhicule de balisage d’urgence.","a"],
+ ["VE","Véhicule électrique (marquage GDO : VE).","a"],
+ ["VEA","Véhicule à énergie alternative (électrique, hybride, GPL, GNV, H2).","a"],
+ ["VHE","Véhicule hybride électrique.","a"],
+ ["VIN","Numéro d’identification du véhicule (n° de série).","a"],
+ ["VL","Véhicule léger (PTAC ≤ 3,5 t).","a"],
+ ["VPB","Véhicule de protection balisage.","a"],
+ ["VSAV","Véhicule de secours et d’assistance aux victimes.","a"],
+ ["VSR","Véhicule de secours routier.","a"],
+ ["VUL","Véhicule utilitaire léger.","a"],
+ ["XABCDE","Bilan primaire : X hémorragie massive, A voies aériennes, B respiration, C circulation, D neurologique, E exposition/environnement.","a"],
+ ["ZI","Zone d’intervention.","a"],
+ ["Axe 0° du bassin","Sortie de la victime dans l’axe de son bassin, pour limiter l’aggravation des lésions du rachis.","t"],
+ ["Bas de caisse","Partie basse et rigide de la caisse, sous les portes (seuil). Zone de 20 cm interdite sur VEA.","t"],
+ ["Biseau","Alignement de cônes en diagonale qui fait changer de voie les usagers sans les arrêter.","t"],
+ ["Bouclier","Plaque de protection rigide placée entre l’outil et la victime à chaque action de force.","t"],
+ ["Calage primaire / secondaire / tertiaire","Blocage (avant-arrière) / calage (mouvements préjudiciables) / étaiement (balancement).","t"],
+ ["Cale escalier","Cale en gradins pour combler l’espace sous le bas de caisse ou le pavillon.","t"],
+ ["Césarisation","Découpe de la carrosserie (montants, pavillon…).","t"],
+ ["Charte graphique","Code de marquage du CA SR : zones interdites hachurées en rouge, traits de coupe, carburation en jaune, PU/PC, BAT.","t"],
+ ["Cônes de Lubeck","Cônes de signalisation de chantier utilisés pour le balisage.","t"],
+ ["Corde à cliquet (rope ratchet)","Cordelette à cliquet pour maintenir une porte ouverte ou un pavillon rabattu.","t"],
+ ["Coupe de décharge","Coupe qui libère les tensions de la structure pour qu’une poussée ou une levée soit efficace.","t"],
+ ["Dégarnissage","Retrait des plastiques et garnitures pour voir airbags, prétensionneurs, renforts, câbles avant de couper.","t"],
+ ["Écureuil","Homme d’intérieur : SP qui entre dans l’habitacle (maintien tête, bilan, surveillance), après le calage primaire.","t"],
+ ["Emballement thermique","Réaction en chaîne dans une batterie lithium qui s’échauffe : feu durable, gaz toxiques, ré-ignition possible.","t"],
+ ["Étai à sangle (Stab Fast)","Béquille réglable reliée au véhicule par une sangle à cliquet, pour l’étaiement (calage tertiaire).","t"],
+ ["Fireman access","Trappe thermo-fusible (Renault) permettant d’envoyer l’eau directement dans la batterie HT.","t"],
+ ["Halligan","Outil de forcement (barre avec pointe, lame et griffe) pour créer un espace.","t"],
+ ["Longeron","Poutre longitudinale de la structure avant, entre suspension et montant A.","t"],
+ ["Montants A, B, C","Montants de la caisse de l’avant vers l’arrière : A (pare-brise), B (central), C (arrière).","t"],
+ ["Pavillon","Toit du véhicule.","t"],
+ ["Plan dur","Planche d’extraction et de transport de la victime.","t"],
+ ["Prétensionneur","Générateur de gaz qui rétracte la ceinture au choc (dans l’enrouleur ou la boucle).","t"],
+ ["Reformation","Redonner du volume à un véhicule déformé (vérin, écarteur), juste ce qu’il faut.","t"],
+ ["Renfort de travellage","Pièce d’appui placée sous le pied du vérin pour une poussée de tableau de bord.","t"],
+ ["Service plug","Coupe-circuit de la batterie HT. Ne jamais le manipuler sans les consignes de la FAD.","t"],
+ ["Sonnette","Équipier qui surveille un danger (circulation, lame de scie) et alerte.","t"],
+ ["Stop-voie","Dispositif qui arrête la circulation sur une voie avant de la laisser repartir.","t"],
+ ["Torchère","Jet de gaz enflammé sortant d’une soupape ou d’un fusible (jusqu’à 15 m).","t"],
+ ["Zone tampon","Zone vide entre le balisage d’approche et le premier engin, pour qu’un véhicule distrait puisse s’arrêter.","t"]
+];
+
+const PHOTOMAN={"apco": {"n": 7, "pages": [7, 11]}, "charte": {"n": 14, "pages": [13, 18]}, "outils": {"n": 6, "pages": [19, 21]}, "batt": {"n": 2, "pages": [23, 24]}, "ceint": {"n": 2, "pages": [25, 25]}, "sieges": {"n": 17, "pages": [27, 31]}, "feuillete": {"n": 7, "pages": [33, 35]}, "trempe": {"n": 5, "pages": [37, 39]}, "jointe": {"n": 2, "pages": [41, 42]}, "stabgen": {"n": 7, "pages": [43, 46]}, "calroues": {"n": 6, "pages": [47, 49]}, "calcote": {"n": 7, "pages": [51, 53]}, "caltoit": {"n": 10, "pages": [55, 57]}, "arrimage": {"n": 6, "pages": [59, 60]}, "porte-serrure": {"n": 22, "pages": [61, 70]}, "porte-charn": {"n": 15, "pages": [71, 74]}, "porte-lat": {"n": 7, "pages": [75, 77]}, "capot": {"n": 6, "pages": [79, 81]}, "coffre-avec": {"n": 9, "pages": [83, 86]}, "coffre-sans": {"n": 8, "pages": [87, 89]}, "tdbgen": {"n": 9, "pages": [91, 94]}, "volant": {"n": 10, "pages": [95, 101]}, "levee": {"n": 10, "pages": [103, 107]}, "poussee": {"n": 9, "pages": [109, 113]}, "pedales": {"n": 10, "pages": [115, 118]}, "reformation": {"n": 10, "pages": [119, 122]}, "tunnel": {"n": 5, "pages": [123, 125]}, "rouesgen": {"n": 7, "pages": [127, 129]}, "demipav": {"n": 10, "pages": [131, 134]}, "demipavc": {"n": 6, "pages": [135, 137]}, "pavillon": {"n": 8, "pages": [139, 142]}, "3eporte": {"n": 10, "pages": [143, 146]}, "voieam": {"n": 10, "pages": [147, 150]}, "laterale": {"n": 12, "pages": [151, 155]}, "cotegen": {"n": 5, "pages": [157, 158]}, "charniere": {"n": 15, "pages": [159, 163]}, "toitgen": {"n": 5, "pages": [165, 167]}, "dpi": {"n": 10, "pages": [169, 173]}, "voile": {"n": 8, "pages": [175, 177]}, "relocgen": {"n": 6, "pages": [179, 180]}, "remiseroues": {"n": 11, "pages": [181, 185]}, "deplacer": {"n": 18, "pages": [187, 191]}, "levage": {"n": 8, "pages": [193, 197]}};
 </script>
 <script>
 (function(){
@@ -1316,10 +1509,10 @@ function errorsList(){ return QUIZ.filter(q=>S.q[q.id] && S.q[q.id].last===false
 
 /* ---------- Routage ---------- */
 let cur = {tab:"accueil"};
-const TABS = ["accueil","fiches","quiz","cas","chiffres"];
+const TABS = ["accueil","fiches","quiz","cas","chiffres","lexique"];
 function go(tab, extra){
   cur = Object.assign({tab}, extra||{});
-  stopTimer();
+  stopTimer(); if(LB){ LB=null; drawLb(); }
   if(location.hash !== "#"+tab){ try{ history.replaceState(null,"","#"+tab); }catch(e){ location.hash = tab; } }
   render(); window.scrollTo(0,0);
 }
@@ -1335,7 +1528,10 @@ function render(){
   else if(cur.tab==="quiz") v.innerHTML = cur.run ? vQuestion() : (cur.result ? vResult() : vQuizSetup());
   else if(cur.tab==="cas") v.innerHTML = cur.cas!=null ? vCas() : vCasList();
   else if(cur.tab==="chiffres") v.innerHTML = vChiffres();
+  else if(cur.tab==="lexique") v.innerHTML = vLexique();
   bind();
+  linkify(v);
+  if($("#gal")) loadGallery($("#gal").dataset.f);
 }
 
 /* ---------- Accueil ---------- */
@@ -1428,6 +1624,8 @@ function vFiche(id){
   const nQ = QUIZ.filter(q=>q.th===f.ch).length;
   let html = `<div class="backbar"><button class="btn ghost" data-act="back-fiches"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 6l-6 6 6 6"/></svg>Fiches</button><span class="pill">${esc(CHAP[f.ch])}</span></div>
   <article class="fiche card"><span class="src">${esc(f.src)}</span><h2>${esc(f.t)}</h2><p class="cle"><span class="mark">${f.cle}</span></p></article>`;
+  const pm = (typeof PHOTOMAN!=="undefined") && PHOTOMAN[f.id];
+  if(pm && pm.n) html += `<section class="gal" id="gal" data-f="${f.id}"><div class="hd"><h3 style="font-size:21px">Photos du référentiel</h3><span class="pill">${pm.n} photos · FT p. ${pm.pages[0]}-${pm.pages[1]}</span></div><div class="gal-load">Chargement des photos…</div></section>`;
   f.b.forEach(([h,items])=>{ html += `<section class="card blk"><h3>${esc(h)}</h3><ul>${items.map(i=>`<li>${i}</li>`).join("")}</ul></section>`; });
   if(f.o.length){
     html += `<section class="ordres"><div class="hd"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M7 4h10v16H7z"/><path d="M10 8h4M10 12h4"/><path d="M12 1v3"/></svg>Ordres du CA, exemples</div>${f.o.map(o=>`<p>${esc(o)}</p>`).join("")}<small>Formulations proposées pour t’entraîner à commander. Adapte-les aux conventions de ton CIS et de ton formateur.</small></section>`;
@@ -1638,6 +1836,83 @@ function vChiffres(){
   return html;
 }
 
+
+/* ---------- Photos du référentiel ---------- */
+const GAL = {};
+function loadGallery(fid){
+  const box = $("#gal"); if(!box) return;
+  const show = items => {
+    const g = $("#gal"); if(!g || g.dataset.f!==fid) return;
+    const strip = `<div class="strip">${items.map((it,i)=>`<button data-ph="${i}" aria-label="Agrandir la photo ${i+1}"><span class="ph"><img src="${it.d}" alt="" loading="lazy" width="${it.w}" height="${it.h}"></span><span class="cp">${esc(it.c||"Photo de la fiche technique")}</span><span class="pg">page ${it.p} · ${i+1}/${items.length}</span></button>`).join("")}</div><p class="muted" style="font-size:13px;margin:0">Fais défiler, touche une photo pour l’agrandir et voir la page entière.</p>`;
+    g.querySelector(".gal-load") ? g.querySelector(".gal-load").outerHTML = strip : null;
+    g.querySelectorAll("[data-ph]").forEach(b=>b.onclick=()=>openLb(items,+b.dataset.ph));
+  };
+  if(GAL[fid]) return show(GAL[fid]);
+  fetch("photos/"+fid+".json").then(r=>{ if(!r.ok) throw 0; return r.json(); }).then(j=>{ GAL[fid]=j; show(j); })
+   .catch(()=>{ const l=$("#gal .gal-load"); if(l) l.textContent="Photos indisponibles hors connexion. Ouvre cette fiche une fois avec du réseau pour les garder."; });
+}
+let LB=null;
+function openLb(items,i){ LB={items,i,page:false,zoom:false}; drawLb(); }
+function drawLb(){
+  let el=$("#lb"); if(!LB){ if(el) el.remove(); document.body.style.overflow=""; return; }
+  if(!el){ el=document.createElement("div"); el.id="lb"; el.className="lb"; el.setAttribute("role","dialog"); el.setAttribute("aria-modal","true"); document.body.appendChild(el); }
+  document.body.style.overflow="hidden";
+  const it=LB.items[LB.i];
+  const src = LB.page ? "photos/p/"+it.p+".webp" : it.d;
+  el.innerHTML = `<div class="bar"><button data-lb="close" aria-label="Fermer">✕</button><button data-lb="prev" aria-label="Photo précédente" ${LB.i?"":"disabled"}>‹</button><span class="sp">${LB.i+1} / ${LB.items.length}</span><button data-lb="next" aria-label="Photo suivante" ${LB.i<LB.items.length-1?"":"disabled"}>›</button><button data-lb="zoom">${LB.zoom?"Ajuster":"Zoom"}</button></div>
+  <div class="stage ${LB.zoom?"zoom":""}"><img src="${src}" alt="${LB.page?"Page "+it.p+" du référentiel":"Photo du référentiel"}"></div>
+  <div class="cap">${LB.page?`Page ${it.p} du référentiel SR.`:esc(it.c||"")}<div class="row" style="margin-top:8px;align-items:center"><span class="src">Référentiel SR · page ${it.p}</span><button class="btn" data-lb="page" style="min-height:38px;background:transparent;color:inherit;border-color:rgba(255,255,255,.3)">${LB.page?"Revenir à la photo":"Voir la page entière"}</button></div></div>`;
+  el.querySelectorAll("[data-lb]").forEach(b=>b.onclick=()=>{
+    const a=b.dataset.lb;
+    if(a==="close") LB=null;
+    else if(a==="prev" && LB.i>0){ LB.i--; LB.page=false; LB.zoom=false; }
+    else if(a==="next" && LB.i<LB.items.length-1){ LB.i++; LB.page=false; LB.zoom=false; }
+    else if(a==="zoom") LB.zoom=!LB.zoom;
+    else if(a==="page"){ LB.page=!LB.page; LB.zoom=false; }
+    drawLb();
+  });
+  linkify(el.querySelector(".cap"));
+}
+document.addEventListener("keydown",e=>{ if(!LB) return; if(e.key==="Escape"){LB=null;drawLb();} if(e.key==="ArrowRight"&&LB.i<LB.items.length-1){LB.i++;LB.page=false;drawLb();} if(e.key==="ArrowLeft"&&LB.i>0){LB.i--;LB.page=false;drawLb();} });
+
+/* ---------- Lexique ---------- */
+const ACR = {};
+LEXIQUE.forEach(([k,d,t])=>{ if(t!=="a") return; k.split(" / ").forEach(x=>{ x=x.trim(); if(!/[()]/.test(x)) ACR[x]=[k,d]; }); });
+const ACR_RE = new RegExp("(?<![A-Za-zÀ-ÿ0-9’'-])(" + Object.keys(ACR).sort((a,b)=>b.length-a.length).map(k=>k.replace(/[.*+?^${}()|[\]\\]/g,"\\$&")).join("|") + ")(?![A-Za-zÀ-ÿ0-9’-])","g");
+function linkify(root){
+  if(!root) return;
+  const tw=document.createTreeWalker(root,NodeFilter.SHOW_TEXT,{acceptNode:n=>{
+    let p=n.parentElement; while(p && p!==root){ if(p.tagName==="BUTTON"||p.tagName==="SELECT"||p.tagName==="INPUT"||p.classList.contains("acr")||p.classList.contains("noacr")) return NodeFilter.FILTER_REJECT; p=p.parentElement; }
+    ACR_RE.lastIndex=0; return ACR_RE.test(n.nodeValue)?NodeFilter.FILTER_ACCEPT:NodeFilter.FILTER_SKIP; }});
+  const nodes=[]; while(tw.nextNode()) nodes.push(tw.currentNode);
+  nodes.forEach(n=>{
+    const frag=document.createDocumentFragment(); let last=0; const t=n.nodeValue; ACR_RE.lastIndex=0; let m;
+    while((m=ACR_RE.exec(t))){ frag.appendChild(document.createTextNode(t.slice(last,m.index))); const s=document.createElement("span"); s.className="acr"; s.textContent=m[1]; s.dataset.acr=m[1]; s.tabIndex=0; frag.appendChild(s); last=m.index+m[1].length; }
+    frag.appendChild(document.createTextNode(t.slice(last))); n.parentNode.replaceChild(frag,n);
+  });
+}
+let popT=null;
+function showPop(k){
+  const e=ACR[k]; if(!e) return; let p=$("#pop");
+  if(!p){ p=document.createElement("div"); p.id="pop"; p.className="pop"; p.setAttribute("role","status"); document.body.appendChild(p); }
+  p.innerHTML=`<b>${esc(e[0])}</b>${esc(e[1])}`; clearTimeout(popT); popT=setTimeout(()=>p.remove(),6000);
+}
+document.addEventListener("click",e=>{ const a=e.target.closest(".acr"); if(a){ e.preventDefault(); e.stopPropagation(); showPop(a.dataset.acr); } else { const p=$("#pop"); if(p && !e.target.closest("#pop")) p.remove(); } },true);
+document.addEventListener("keydown",e=>{ if((e.key==="Enter"||e.key===" ") && e.target.classList && e.target.classList.contains("acr")){ e.preventDefault(); showPop(e.target.dataset.acr); } });
+
+function vLexique(){
+  const q=norm(cur.lq||""); const f=cur.lf||"all";
+  let list = LEXIQUE.filter(l=> f==="all" || l[2]===f).filter(l=>!q || norm(l[0]+" "+l[1]).includes(q));
+  list = list.slice().sort((a,b)=>a[0].localeCompare(b[0],"fr",{sensitivity:"base"}));
+  let html = `<div><div class="eyebrow">${LEXIQUE.filter(l=>l[2]==="a").length} sigles · ${LEXIQUE.filter(l=>l[2]==="t").length} termes techniques</div><h2 class="sec-title">Lexique</h2><p class="muted" style="margin:6px 0 0">Partout dans l’appli, les sigles soulignés en pointillés s’expliquent d’une touche.</p></div>
+  <div class="field"><label for="inLex">Chercher un sigle ou un mot</label><input id="inLex" type="search" placeholder="ex. FLU, VEA, écureuil" value="${esc(cur.lq||"")}" autocomplete="off"></div>
+  <div class="chips"><button data-lf="all" aria-pressed="${f==="all"}">Tout</button><button data-lf="a" aria-pressed="${f==="a"}">Sigles</button><button data-lf="t" aria-pressed="${f==="t"}">Termes techniques</button></div>`;
+  if(!list.length) return html + `<div class="card empty">Rien trouvé pour « ${esc(cur.lq)} ».</div>`;
+  html += `<div class="lex noacr">`; let L="";
+  list.forEach(([k,d])=>{ const l=k[0].toUpperCase().normalize("NFD").replace(/[̀-ͯ]/g,""); const ll=/[0-9]/.test(l)?"#":l; if(ll!==L && !q){ html+=`<div class="letter">${ll}</div>`; L=ll; } html += `<div class="li"><b>${esc(k)}</b><span>${esc(d)}</span></div>`; });
+  return html + `</div>`;
+}
+
 /* ---------- Événements ---------- */
 function bind(){
   const v=$("#view");
@@ -1658,6 +1933,8 @@ function bind(){
   v.querySelectorAll("[data-cm]").forEach(b=>b.onclick=()=>{ cur={tab:"chiffres",cm:b.dataset.cm}; render(); });
   const sel=$("#selChap"); if(sel) sel.onchange=()=>{ cur.chap=sel.value; render(); };
   const ins=$("#inSearch"); if(ins){ ins.oninput=()=>{ cur.search=ins.value; const pos=ins.selectionStart; render(); const n=$("#inSearch"); n.focus(); try{n.setSelectionRange(pos,pos);}catch(e){} }; }
+  v.querySelectorAll("[data-lf]").forEach(b=>b.onclick=()=>{ cur.lf=b.dataset.lf; render(); });
+  const il=$("#inLex"); if(il){ il.oninput=()=>{ cur.lq=il.value; const pos=il.selectionStart; render(); const n=$("#inLex"); n.focus(); try{n.setSelectionRange(pos,pos);}catch(e){} }; }
   v.querySelectorAll("[data-act]").forEach(b=>b.onclick=()=>act(b.dataset.act));
   if(cur.tab==="quiz" && cur.run && cur.run.mode==="exam" && !cur.run.list[cur.run.i].done && !timerId) startTimer();
 }

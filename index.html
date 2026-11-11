@@ -2466,7 +2466,9 @@ function act(a){
     case "grid-del": cur.confirmDel=true; render(); break;
     case "grid-del-no": cur.confirmDel=false; render(); break;
     case "grid-del-yes": delete S.gr[cur.ft][cur.gs]; save(); cur.gs=null; cur.confirmDel=false; render(); toast("Grille supprimée"); break;
-    case "bk-file": { const txt=backupJSON(); try{ const blob=new Blob([txt],{type:"application/json"}); const a=document.createElement("a"); a.href=URL.createObjectURL(blob); a.download="revisions-sr-sauvegarde-"+new Date().toISOString().slice(0,10)+".json"; document.body.appendChild(a); a.click(); setTimeout(()=>{ URL.revokeObjectURL(a.href); a.remove(); },1000); S.lastExport=today(); save(); render(); toast("Fichier téléchargé"); }catch(e){ copyText(txt,"Téléchargement impossible : code copié"); } break; }
+    case "bk-file": { const txt=backupJSON(); const fname="revisions-sr-sauvegarde-"+new Date().toISOString().slice(0,10)+".json";
+      if(DL){ DL.save({filename:fname, data:txt}).then(()=>{ S.lastExport=today(); save(); render(); toast("Sauvegarde enregistrée"); }).catch(e=>{ if(e && e.code==="declined") return; copyText(txt,"Téléchargement impossible : code copié"); }); break; }
+      try{ const blob=new Blob([txt],{type:"application/json"}); const a=document.createElement("a"); a.href=URL.createObjectURL(blob); a.download="revisions-sr-sauvegarde-"+new Date().toISOString().slice(0,10)+".json"; document.body.appendChild(a); a.click(); setTimeout(()=>{ URL.revokeObjectURL(a.href); a.remove(); },1000); S.lastExport=today(); save(); render(); toast("Fichier téléchargé"); }catch(e){ copyText(txt,"Téléchargement impossible : code copié"); } break; }
     case "bk-copy": copyText(backupJSON(),"Code de sauvegarde copié"); S.lastExport=today(); save(); render(); break;
     case "bk-paste": { const t=$("#inCode"); const o=parseBackup(t?t.value.trim():""); if(o){ cur.pending=o; render(); } break; }
     case "bk-no": cur.pending=null; render(); break;
@@ -2497,6 +2499,10 @@ function act(a){
   }
 }
 function toast(msg){ const t=document.createElement("div"); t.className="toast"; t.textContent=msg; t.setAttribute("role","status"); document.body.appendChild(t); setTimeout(()=>t.remove(),2200); }
+
+/* ---------- Téléchargement dans le viewer Claude (capability downloads) ---------- */
+let DL=null;
+try{ if(window.claude && typeof window.claude.use==="function") window.claude.use("downloads").then(d=>{ DL=d||null; }).catch(()=>{}); }catch(e){}
 
 /* ---------- Démarrage ---------- */
 const h = location.hash.slice(1);

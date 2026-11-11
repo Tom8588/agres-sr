@@ -128,6 +128,31 @@ nav.tabs button[aria-current="page"]{color:var(--accent);font-weight:700}
 .mastery{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
 .mastery button[aria-pressed="true"].rw{background:var(--bad);border-color:var(--bad);color:#fff}
 .mastery button[aria-pressed="true"].ok{background:var(--ok);border-color:var(--ok);color:#fff}
+.memo h3{font-family:var(--f-display);font-size:19px;margin:16px 0 6px;text-transform:uppercase;letter-spacing:.03em;color:var(--muted)}
+.memo ul{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:6px}
+.memo em{font-style:normal;font-weight:700;background:var(--mark-soft);padding:0 3px;border-radius:3px;transition:color .15s,background .15s}
+.memo.hide em{color:transparent;background:var(--surface2);border:1px dashed var(--line);cursor:pointer;user-select:none}
+.memo.hide em.rv{color:inherit;background:var(--ok-soft);border-color:transparent}
+.memo .mn{font-family:var(--f-display);font-size:21px;font-weight:700;line-height:1.2;background:var(--mark);color:#111;padding:10px 12px;border-radius:8px}
+.schema{margin:14px 0 4px;padding:10px;background:var(--bg);border:1px solid var(--line);border-radius:8px;overflow-x:auto}
+.schema svg{display:block;width:100%;height:auto;min-width:280px;font-family:var(--f-body)}
+.schema svg.wide{min-width:620px}
+.schema .swipe{display:none;font-size:12px;color:var(--muted);margin:6px 0 0;text-align:center}
+@media (max-width:660px){.schema:has(svg.wide) .swipe{display:block}}
+.seg.seg2{grid-template-columns:1fr 1fr}
+.trame{margin:10px 0 0;padding-left:20px;display:flex;flex-direction:column;gap:6px;font-size:15px}
+details.card summary{cursor:pointer}
+.addrow{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px}
+.addrow input,#inNote,#inCode{width:100%;box-sizing:border-box;border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:8px;padding:10px 12px;font:inherit;font-size:16px}
+.legend{display:flex;gap:14px;flex-wrap:wrap;font-size:13px;color:var(--muted)}
+.grid h3{font-family:var(--f-display);font-size:19px;margin:0 0 4px}
+.crit{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:10px;align-items:center;padding:9px 0;border-top:1px solid var(--line);font-size:14px}
+.crit:first-of-type{border-top:0}
+.abc{display:flex;gap:4px}
+.abc button{border:1px solid var(--line);background:var(--surface);border-radius:6px;min-width:44px;min-height:40px;font-family:var(--f-mono);font-size:12px;font-weight:600;padding:0 4px}
+.abc button[aria-pressed="true"].v-A{background:var(--ok);border-color:var(--ok);color:#fff}
+.abc button[aria-pressed="true"].v-ECA{background:var(--mark);border-color:var(--mark);color:#111}
+.abc button[aria-pressed="true"].v-NA{background:var(--bad);border-color:var(--bad);color:#fff}
 .plan{display:flex;flex-direction:column;gap:0;border:1px solid var(--line);border-radius:var(--r);overflow:hidden;background:var(--surface)}
 .plan .d{display:grid;grid-template-columns:64px 1fr;gap:10px;padding:10px 14px;border-top:1px solid var(--line);align-items:center}
 .plan .d:first-child{border-top:0}
@@ -288,11 +313,11 @@ nav.tabs button[aria-current="page"]{color:var(--accent);font-weight:700}
 
 <nav class="tabs" aria-label="Navigation"><div class="in">
   <button data-tab="accueil"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l9-7 9 7v9a1 1 0 0 1-1 1h-5v-6h-6v6H4a1 1 0 0 1-1-1z"/></svg>Accueil</button>
+  <button data-tab="memo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l2.6 5.6 6.1.7-4.5 4.2 1.2 6L12 15.5 6.6 18.5l1.2-6L3.3 8.3l6.1-.7z"/></svg>Mémo</button>
   <button data-tab="fiches"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h12a4 4 0 0 1 4 4v12H8a4 4 0 0 1-4-4z"/><path d="M8 9h8M8 13h8M8 17h5"/></svg>Fiches</button>
   <button data-tab="quiz"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M9.5 9a2.5 2.5 0 1 1 3.5 2.3c-.7.3-1 .9-1 1.7v.5"/><path d="M12 17h.01"/></svg>Quiz</button>
   <button data-tab="cas"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 16l2-6a2 2 0 0 1 2-1.4h10A2 2 0 0 1 19 10l2 6v3h-3v-2H6v2H3z"/><circle cx="7.5" cy="14" r="1"/><circle cx="16.5" cy="14" r="1"/></svg>Cas</button>
-  <button data-tab="chiffres"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 12h18"/><path d="M8 8.5h2M14 8.5h2M8 15.5h3M14 15.5h3"/></svg>Chiffres</button>
-  <button data-tab="lexique"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19V5a2 2 0 0 1 2-2h13v16H6a2 2 0 0 0-2 2"/><path d="M8 7h7M8 11h5"/><path d="M19 19v2H6"/></svg>Lexique</button>
+  <button data-tab="outils"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>Outils</button>
 </div></nav>
 
 <script>
@@ -1493,6 +1518,246 @@ const LEXIQUE = [
  ["Zone tampon","Zone vide entre le balisage d’approche et le premier engin, pour qu’un véhicule distrait puisse s’arrêter.","t"]
 ];
 
+/* ---------- Fiches mémo : l'essentiel sur un écran. Les <em> se masquent en mode révision. ---------- */
+const SVG_ZONAGE = `<svg viewBox="0 0 320 250" role="img" aria-label="Schéma du zonage opérationnel : zone rouge d’exclusion 50 m, zone orange contrôlée 100 m, zone verte de soutien">
+<rect x="4" y="4" width="312" height="242" rx="12" fill="#1C7A4B" fill-opacity=".16" stroke="#1C7A4B" stroke-width="2" stroke-dasharray="6 5"/>
+<circle cx="160" cy="125" r="100" fill="#E8590C" fill-opacity=".2" stroke="#E8590C" stroke-width="2"/>
+<circle cx="160" cy="125" r="52" fill="#C8102E" fill-opacity=".25" stroke="#C8102E" stroke-width="2"/>
+<rect x="144" y="114" width="32" height="20" rx="5" style="fill:var(--ink)"/>
+<line x1="160" y1="125" x2="212" y2="125" style="stroke:var(--ink)" stroke-width="1.5"/><text x="196" y="119" text-anchor="middle" font-size="12" font-weight="700" style="fill:var(--ink)">50 m</text>
+<line x1="160" y1="140" x2="252" y2="170" style="stroke:var(--ink)" stroke-width="1.5"/><text x="232" y="152" font-size="12" font-weight="700" style="fill:var(--ink)">100 m</text>
+<text x="160" y="96" text-anchor="middle" font-size="11" font-weight="700" fill="#C8102E">EXCLUSION</text>
+<text x="160" y="44" text-anchor="middle" font-size="11" font-weight="700" fill="#E8590C">CONTRÔLÉE</text>
+<text x="18" y="24" font-size="11" font-weight="700" fill="#1C7A4B">SOUTIEN</text>
+<text x="18" y="236" font-size="10" style="fill:var(--muted)">Limite extérieure = périmètre de sécurité</text></svg>`;
+
+const SVG_CHANTIER = `<svg viewBox="0 0 320 260" role="img" aria-label="Schéma du chantier : zone de travail 3 à 5 m, zone logistique 5 à 10 m avec les parcs, débris à l’extérieur hors axe de sortie">
+<circle cx="160" cy="128" r="112" fill="#1C7A4B" fill-opacity=".10" stroke="#1C7A4B" stroke-width="2"/>
+<circle cx="160" cy="128" r="60" fill="#C8102E" fill-opacity=".14" stroke="#C8102E" stroke-width="2"/>
+<rect x="138" y="104" width="44" height="50" rx="8" style="fill:var(--ink)"/>
+<text x="160" y="134" text-anchor="middle" font-size="10" font-weight="700" style="fill:var(--surface)">VL</text>
+<path d="M160 154 L160 250" stroke="#1C7A4B" stroke-width="10" stroke-opacity=".35"/>
+<text x="168" y="214" font-size="10" font-weight="700" fill="#1C7A4B">axe de sortie libre</text>
+<text x="160" y="84" text-anchor="middle" font-size="11" font-weight="700" fill="#C8102E">TRAVAIL 3-5 m</text>
+<text x="160" y="32" text-anchor="middle" font-size="11" font-weight="700" fill="#1C7A4B">LOGISTIQUE 5-10 m</text>
+<rect x="56" y="112" width="40" height="28" rx="4" fill="#F2B705"/><text x="76" y="130" text-anchor="middle" font-size="9" font-weight="700" fill="#111">Parc SR</text>
+<rect x="224" y="112" width="40" height="28" rx="4" fill="#4C8DD6"/><text x="244" y="130" text-anchor="middle" font-size="9" font-weight="700" fill="#fff">SUAP</text>
+<rect x="276" y="14" width="40" height="28" rx="4" style="fill:var(--muted)"/><text x="296" y="32" text-anchor="middle" font-size="9" font-weight="700" fill="#fff">Débris</text>
+<text x="8" y="252" font-size="10" style="fill:var(--muted)">Débris juste à l’extérieur, jamais dans l’axe</text></svg>`;
+
+const SVG_BALISAGE = `<svg class="wide" viewBox="0 0 640 210" role="img" aria-label="Schéma du balisage dans le sens de la circulation : présignalisation, biseau, zone tampon, engin de protection, zone de travail, zone de stationnement">
+<rect x="0" y="54" width="640" height="84" style="fill:var(--surface2)"/>
+<line x1="0" y1="96" x2="640" y2="96" style="stroke:var(--muted)" stroke-width="2" stroke-dasharray="14 10"/>
+<path d="M14 116 h44 m-10 -7 l10 7 -10 7" style="stroke:var(--ink)" stroke-width="3" fill="none"/>
+<text x="14" y="148" font-size="10" style="fill:var(--muted)">circulation</text>
+<rect x="92" y="34" width="22" height="16" rx="2" fill="#F2B705"/><polygon points="103,24 114,40 92,40" fill="#C8102E" opacity=".9"/>
+<g fill="#E8590C"><polygon points="190,132 196,120 202,132"/><polygon points="206,124 212,112 218,124"/><polygon points="222,116 228,104 234,116"/><polygon points="238,108 244,96 250,108"/></g>
+<rect x="262" y="100" width="70" height="34" fill="#F2B705" fill-opacity=".25" stroke="#F2B705" stroke-dasharray="4 3"/>
+<rect x="340" y="102" width="44" height="28" rx="4" fill="#C8102E"/><text x="362" y="120" text-anchor="middle" font-size="9" font-weight="700" fill="#fff">VSR</text>
+<path d="M372 94 h12 l-6 -8 z" fill="#F2B705"/>
+<rect x="394" y="96" width="96" height="40" rx="6" fill="#C8102E" fill-opacity=".15" stroke="#C8102E"/>
+<rect x="420" y="104" width="34" height="22" rx="4" style="fill:var(--ink)"/>
+<rect x="506" y="104" width="36" height="24" rx="4" fill="#4C8DD6"/><text x="524" y="120" text-anchor="middle" font-size="8" font-weight="700" fill="#fff">VSAV</text>
+<rect x="550" y="104" width="36" height="24" rx="4" style="fill:var(--muted)"/><rect x="594" y="104" width="36" height="24" rx="4" style="fill:var(--muted)"/>
+<g font-size="10" font-weight="700" style="fill:var(--ink)" text-anchor="middle">
+<text x="103" y="168">1 Approche</text><text x="103" y="181" font-weight="400" style="fill:var(--muted)">présignalisation</text>
+<text x="220" y="168">2 Biseau</text><text x="220" y="181" font-weight="400" style="fill:var(--muted)">cônes</text>
+<text x="297" y="168">3 Tampon</text><text x="297" y="181" font-weight="400" style="fill:var(--muted)">arrêt d’un distrait</text>
+<text x="362" y="168">4 Protection</text><text x="362" y="181" font-weight="400" style="fill:var(--muted)">engin + FLU</text>
+<text x="442" y="168">5 Travail</text><text x="442" y="181" font-weight="400" style="fill:var(--muted)">4 sphères</text>
+<text x="568" y="168">6 Stationnement</text><text x="568" y="181" font-weight="400" style="fill:var(--muted)">file indienne</text></g>
+<text x="320" y="204" text-anchor="middle" font-size="10" style="fill:var(--muted)">Principe GDO annexe G, à adapter aux procédures du SDIS et au type de route</text></svg>`;
+
+const SVG_TMD = `<svg viewBox="0 0 320 150" role="img" aria-label="Plaque orange TMD : code danger 33 en haut, numéro ONU 1203 en bas">
+<rect x="70" y="10" width="180" height="130" rx="8" fill="#F28C00" stroke="#111" stroke-width="5"/>
+<line x1="70" y1="75" x2="250" y2="75" stroke="#111" stroke-width="5"/>
+<text x="160" y="60" text-anchor="middle" font-size="44" font-weight="700" fill="#111" font-family="Arial,sans-serif">33</text>
+<text x="160" y="125" text-anchor="middle" font-size="44" font-weight="700" fill="#111" font-family="Arial,sans-serif">1203</text>
+<text x="262" y="48" font-size="11" style="fill:var(--ink)">danger</text>
+<text x="262" y="114" font-size="11" style="fill:var(--ink)">n° ONU</text></svg>`;
+
+const MEMOS = [
+{id:"m-deroule",t:"Mon déroulé de CA SR",tag:"Commandement",mn:"Arriver · Sécuriser · Concerter · Sortir · Partir",
+ sec:[
+  ["En transit",["<em>Ceinture</em> pour tous, priorité par avertisseurs lumineux et sonores, vitesse adaptée."]],
+  ["À l’arrivée",["Se placer <em>du même côté</em> que les engins déjà engagés, manœuvres <em>guidées</em>.","À l’arrêt : roues braquées à l’<em>opposé</em> de la zone de flux.","Descendre <em>côté opposé</em> à la circulation, après avoir vérifié qu’elle le permet."]],
+  ["Les 3 réactions immédiates",["1. Sécurité de la <em>zone</em> (zonage opérationnel).","2. Sécurité des <em>véhicules et du chargement</em> (5i).","3. Sécurité et survie des <em>victimes</em> (STOP compression, STOP hémorragie, dégagement d’urgence)."]],
+  ["Reconnaître et concerter",["Mon <em>360°</em> : historique, véhicules, déformations, risques, victimes, QR code → <em>FAD</em>.","Concertation CA SUAP + CA SR + SMUR + COS : <em>un PU et un PC par victime</em>.","Marquer PU et PC sur le véhicule (jamais l’état de la victime)."]],
+  ["Travailler et sortir",["Sécuriser les techniques : <em>3D</em> (Dégarnir, Dessiner, Distance 30-60-90).","Sortir : <em>2D</em> (Découper, Dégager), de la victime vers l’extérieur.","Surveiller la victime en permanence : le <em>PU</em> peut être déclenché à tout moment."]],
+  ["Se désengager",["Retrait de la signalisation dans le <em>sens inverse</em> de la pose, sous la protection d’un véhicule.","Ne pas garder les engins dont la mission est terminée ; les SP ne se prononcent <em>jamais</em> sur la réouverture."]]
+ ],f:["reac3","fro50","mgo","plans"]},
+{id:"m-5s",t:"MGO SR : les 5S",tag:"Commandement",mn:"Site · Stabilisation · SUAP · Sécurisation des techniques · Sortie",
+ sec:[
+  ["Les 5S",["<b>S</b>écurisation du <em>site</em> : zonage, protection incendie, 360°.","<b>S</b>écurisation et <b>S</b>tabilisation du <em>véhicule</em> : les 5i.","<b>S</b>ecours d’urgence aux personnes : bilan <em>XABCDE</em> par l’équipe SUAP, STOP compression conjoint.","<b>S</b>écurisation des <em>techniques</em> : les 3D.","<b>S</b>ortie de la victime : les <em>2D</em>."]],
+  ["À retenir",["Pas d’ordre chronologique <em>strict</em> : certaines actions sont simultanées.","Toute idée de manœuvre a sa <em>solution de remplacement</em> (plan d’urgence)."]]
+ ],f:["mgo"]},
+{id:"m-5i",t:"Les 5i : sécuriser le véhicule",tag:"Commandement",mn:"Identifier · Inspecter · Interdire · Immobiliser · Isoler",
+ sec:[
+  ["Les 5i",["<b>Identifier</b> : dangers, type de véhicule et <em>énergie</em> → FAD.","<b>Inspecter</b> : fuite carburant/gaz, câble ou batterie HT abîmés, chargement.","<b>Interdire</b> : ne pas toucher, sectionner, déplacer, comprimer une <em>source ou un vecteur</em> d’énergie.","<b>Immobiliser</b> : contact coupé, <em>frein de parc, levier en P</em>, smart key à plus de <em>5 m</em>, caler les roues.","<b>Isoler</b> : couper le contact (relais HT ouverts, électrovannes fermées), puis la 12 V."]],
+  ["Avant de couper la 12 V",["Utiliser les mobilités utiles : <em>vitres, sièges, colonne, coffre</em> (par l’intérieur en priorité).","Sans FAD : <em>aucune</em> manipulation du service plug ni de la boucle d’isolement."]]
+ ],f:["5i","batt"]},
+{id:"m-zonage",t:"Zonage opérationnel",tag:"Sécurité",mn:"Rouge 50 m · Orange 100 m · Vert = soutien",svg:SVG_ZONAGE,
+ sec:[
+  ["Les 3 zones",["<b style='color:#C8102E'>Exclusion</b> : danger absolu ; y accéder impose de faire <em>couper la circulation</em>.","<b style='color:#E8590C'>Contrôlée</b> : risque élevé ; seulement si <em>strictement nécessaire</em> (secours, désincarcération, commandement).","<b style='color:#1C7A4B'>Soutien</b> : risque acceptable ; impliqués en sécurité, personnels en attente."]],
+  ["Zonage réflexe",["Exclusion <em>50 m</em> de rayon, contrôlée <em>100 m</em>.","Limite extérieure du soutien = <em>périmètre de sécurité</em>."]]
+ ],f:["zonage"]},
+{id:"m-chantier",t:"Zonage du chantier SR",tag:"Sécurité",mn:"Travail 3-5 m · Logistique 5-10 m · Débris hors axe",svg:SVG_CHANTIER,
+ sec:[
+  ["Les zones",["<b>Travail</b> : <em>3 à 5 m</em> autour des véhicules, seul le personnel indispensable.","<b>Logistique</b> : <em>5 à 10 m</em>, parc matériel SR, parc SUAP, personnel en attente. Elle reste dégagée.","<b>Débris</b> : juste à l’extérieur de la logistique, <em>jamais dans l’axe de sortie</em>."]],
+  ["Les 3 parcs",["Parc à <em>matériels</em> (outils en position de sécurité), parc à <em>débris</em>, parc <em>SSUAP</em>.","Sans mission, chacun se tient à son parc."]]
+ ],f:["zchantier"]},
+{id:"m-balisage",t:"Balisage et place des engins",tag:"Sécurité",mn:"Approche → Biseau → Tampon → Protection → Travail → Stationnement",svg:SVG_BALISAGE,
+ sec:[
+  ["Dans le sens de la circulation",["<b>Approche</b> : avertir l’usager ; se termine au début du <em>biseau</em> ou au stop-voie.","<b>Biseau</b> : faire changer de voie <em>sans arrêt</em>, cônes espacés régulièrement.","<b>Tampon</b> : laisser un véhicule distrait <em>s’arrêter avant le premier engin</em> ; longueur selon route, météo, jour/nuit.","<b>Travail</b> : 4 sphères, <em>SUAP côté victime</em>, SR au plus proche, incendie, commandement.","<b>Stationnement</b> : <em>file indienne</em> dans le sens de la circulation ; en épi si nombreuses victimes."]],
+  ["Règles engins",["FLU uniquement sur <em>chaussées séparées</em>, jamais plus de <em>2</em> en même temps.","Roues braquées à l’<em>opposé</em> du flux ; manœuvres guidées.","La régulation de la circulation revient aux <em>forces de l’ordre</em>."]],
+  ["Freinage (sec / mouillé)",["50 km/h : <em>25 m / 38 m</em>.","80 km/h : <em>64 m / 96 m</em>.","130 km/h : <em>169 m / 254 m</em>."]]
+ ],f:["zonage","fro50","acteurs"]},
+{id:"m-plans",t:"DU, PU, PC : les plans",tag:"Commandement",mn:"Rouge = DU · Orange/jaune = PU · Vert = PC",
+ sec:[
+  ["Les 3 sorties",["<b style='color:#C8102E'>Dégagement d’urgence</b> : danger <em>réel, vital, immédiat, non contrôlable</em> (feu, arrêt cardiaque).","<b style='color:#E8590C'>Plan d’urgence</b> : victime <em>critique</em> ou qui le devient (hémorragie, perte de connaissance, trauma crâne ou abdomen).","<b style='color:#1C7A4B'>Plan complet</b> : victime <em>stable</em>, sortie dans l’axe <em>0° du bassin</em>."]],
+  ["Règles",["<em>Un PU et un PC</em> par victime.","Le PU n’est pas seulement recherché : il est <em>réalisé</em>.","Sortie latérale à 90° : <em>ACT + collier</em>, sinon l’axe tête-cou-tronc n’est pas préservé."]]
+ ],f:["plans","axes","apco"]},
+{id:"m-3d2d",t:"3D, 2D et 30-60-90",tag:"Techniques",mn:"Dégarnir · Dessiner · Distance → Découper · Dégager",
+ sec:[
+  ["Sécuriser (3D)",["<b>Dégarnir</b> la zone à travailler, <em>pas tout le véhicule</em>.","<b>Dessiner</b> la charte graphique : par le <em>CA SR uniquement</em>, après dégarnissage, avec la FAD.","<b>Distance</b> : <em>30 cm</em> airbags latéraux, <em>60 cm</em> frontal conducteur, <em>90 cm</em> frontal passager."]],
+  ["Sortir (2D)",["<b>Découper</b> selon les techniques, uniquement sur le <em>trait de coupe</em>.","<b>Dégager</b> : sortie par le SUAP, SR en soutien, de la <em>victime vers l’extérieur</em>."]],
+  ["Choisir la technique : 5 critères",["Véhicule · position et état de la victime · <em>niveau de piégeage</em> · matériel · <em>temps disponible</em>."]]
+ ],f:["choix","charte","airbags"]},
+{id:"m-stab",t:"Stabilisation",tag:"Techniques",mn:"Blocage → Calage → Étaiement",
+ sec:[
+  ["Les 3 étapes",["<b>1. Blocage</b> (primaire) : limiter les mouvements <em>avant/arrière</em>.","<b>2. Calage</b> (secondaire) : limiter <em>tous</em> les mouvements préjudiciables.","<b>3. Étaiement</b> (tertiaire) si nécessaire : limiter le <em>balancement</em>."]],
+  ["Selon la position",["Sur ses roues : caler une roue <em>non directrice</em>, puis 4 points en moins de <em>5 min</em>.","Sur le côté : dans le sens du basculement, étais au <em>1/3 avant et 1/3 arrière</em>.","Sur le toit : le moteur fait pencher vers l’avant ; caler l’<em>arrière</em> et à la base des montants A."]],
+  ["À retenir",["L’écureuil peut entrer après le <em>calage primaire</em>.","Calage <em>contrôlé</em> dès qu’une partie est découpée ou retirée."]]
+ ],f:["stabgen","calroues","calcote","caltoit"]},
+{id:"m-energies",t:"Énergies : les repères",tag:"Énergies",mn:"Couper le contact · Ne rien toucher · Lire la FAD",
+ sec:[
+  ["VE et hybrides",["Jusqu’à <em>800 V</em>, câbles <em>orange</em>. Contact coupé = relais HT ouverts.","Interdit : toucher, sectionner, comprimer. Zone de <em>20 cm</em> du bas de caisse.","Emballement thermique : <em>dégagement d’urgence</em> des occupants."]],
+  ["GPL",["<em>10 bar</em> max, remplissage 80 %, soupape <em>27 bar</em>, fusible 110 °C.","Torchère jusqu’à <em>15 m</em> ; BLEVE : éclats jusqu’à <em>100 m</em>."]],
+  ["GNV",["GNC : <em>200-250 bar</em>, fusible 110 °C, TPRD : vidange en ~<em>3 min</em>.","GNL : <em>-160 °C</em>, volume réduit ~600 fois ; eau = « explosion froide »."]],
+  ["Hydrogène",["<em>350 ou 700 bar</em>, TPRD ~110 °C, rejet orienté <em>vers le bas</em>.","Flamme invisible de jour : <em>caméra thermique</em>.","Carte grise P3 : <em>HH</em> = pile à combustible, <em>H2</em> = moteur thermique."]]
+ ],f:["ht","gpl","gnv","h2","cartegrise"]},
+{id:"m-tmd",t:"Plaque TMD",tag:"Énergies",mn:"En haut le danger · En bas le n° ONU",svg:SVG_TMD,
+ sec:[
+  ["Lire la plaque",["Code danger en <em>haut</em>, numéro ONU (4 chiffres) en <em>bas</em>.","Chiffre <em>doublé</em> = danger renforcé ; <em>X</em> = réagit violemment avec l’eau.","1 explosif · 2 gaz · 3 liquide inflammable · 4 solide inflammable · 5 comburant · 6 toxique · 7 radioactif · 8 corrosif · 9 divers."]],
+  ["Conduite à tenir",["Se renseigner sur le produit (<em>conducteur, CODIS</em>).","Caler, périmètre de sécurité, moyens selon <em>pente et vent</em>.","Barrages au sol ; citerne non atteinte : jet diffusé ou mousse."]]
+ ],f:["tmd"]},
+{id:"m-victimes",t:"Victimes : piégeage et dégagement",tag:"Commandement",mn:"Sortie seule · Piégée · Incarcérée · Éjectée",
+ sec:[
+  ["Niveaux (référentiel SDIS 88)",["<b>Piégée</b> : ne peut sortir seule, par ses <em>blessures</em> ou la <em>déformation</em> de la structure.","<b>Incarcérée</b> : un élément <em>intrusif ou compressif</em> de la structure est sur la victime.","Le GDO dit : accessible / incarcérée / éjectée."]],
+  ["Type de dégagement",["Feu, arrêt cardiaque → <em>urgence</em> (DU).","Hémorragie non contrôlée, perte de connaissance, trauma crâne/abdomen → <em>rapide</em> (PU).","Extrémités, colonne isolée → <em>normal</em> (PC)."]],
+  ["Heure d’or",["Trajet <em>15-20 min</em> · dégagement <em>20-30 min</em> · transport <em>15-20 min</em>."]]
+ ],f:["apco","lecture"]},
+{id:"m-secu",t:"Sécurité de l’équipe",tag:"Sécurité",mn:"Tenue · Outil · Position · Masque",
+ sec:[
+  ["Tenue",["SR : <em>tenue de feu + chasuble HV</em> ; SUAP : TSI/F1 manches baissées + chasuble HV.","Découpe de vitrages : <em>FFP3</em> obligatoire (FRO 50) pour sauveteurs et victimes."]],
+  ["Outils",["Se déplacer outil <em>fermé, vers le bas</em>.","Jamais <em>entre l’outil et le véhicule</em>.","Écarteur : becs engagés <em>au moins à moitié</em> avant pleine puissance.","Bouclier et/ou couverture à <em>chaque action de force</em>."]]
+ ],f:["fro50","outils"]}
+];
+
+/* ---------- Cas concrets supplémentaires ---------- */
+CAS.push(
+{t:"Bus urbain au GNC, choc latéral",tag:"Bus · GNC",intro:"En ville, un VL a percuté le flanc d’un bus urbain (carte grise P3 « GN », réservoirs sur le toit). Une quinzaine de passagers impliqués, deux blessés légers. Le conducteur du VL est incarcéré côté choc. Plusieurs engins arrivent en renfort.",st:[
+ {q:"Comment fais-tu stationner les renforts ?",o:[
+  {t:"File indienne dans le sens de la circulation, en épi si le nombre de victimes l’impose",v:2,f:"Zone de stationnement : file indienne, épi possible en cas de nombreuses victimes. C’est la seule zone qui peut s’agrandir fortement."},
+  {t:"Au plus près du bus, tout autour, pour gagner du temps",v:0,f:"Tu encombres la zone de travail et la logistique, et tu bloques les axes de sortie."},
+  {t:"Tous dans la zone tampon",v:0,f:"La zone tampon doit rester vide : elle sert à arrêter un véhicule distrait avant le premier engin."}]},
+ {q:"Un sifflement continu se fait entendre sur le toit du bus. Ta décision ?",o:[
+  {t:"Faire éloigner tout le monde du bus, hors de l’axe du rejet, le temps que le réservoir se vide (environ 3 min)",v:2,f:"TPRD déclenché : il empêche l’éclatement, son déclenchement est définitif et le réservoir se vide en ~3 min en torchère continue."},
+  {t:"Envoyer un équipier fermer la vanne manuelle sur le toit",v:0,f:"Tu exposes un équipier au rejet sous 200-250 bar : le TPRD a déclenché, on ne l’arrête pas."},
+  {t:"Arroser le réservoir pour stopper la fuite",v:0,f:"Le déclenchement du TPRD est définitif : l’eau ne l’arrêtera pas."}]},
+ {q:"Pour le conducteur du VL, incarcéré côté choc, par où abordes-tu ?",o:[
+  {t:"Par le côté opposé au choc quand c’est possible, après les 5i et le calage",v:2,f:"Choc latéral : le plus létal pour les passagers ; abord du côté opposé quand c’est possible (lecture de l’accident)."},
+  {t:"Directement par la porte enfoncée, à l’écarteur",v:0,f:"Sans calage ni 5i, et sur la zone la plus déformée : risque pour la victime et l’équipe."},
+  {t:"On attend que le bus soit dégagé par l’exploitant",v:0,f:"La victime incarcérée reste ta priorité ; l’enlèvement des véhicules vient après."}]}
+]},
+{t:"Citerne 33/1203 couchée",tag:"TMD · citerne",intro:"RN, matin. Un PL citerne est couché sur le flanc. Plaque orange 33 / 1203. Forte odeur de carburant, un écoulement part vers le fossé. Le conducteur est conscient dans la cabine et ne peut pas sortir seul.",st:[
+ {q:"Que t’indique le code danger 33 ?",o:[
+  {t:"Liquide très inflammable",v:2,f:"3 = liquide inflammable, chiffre doublé = danger renforcé : très inflammable."},
+  {t:"Gaz toxique",v:0,f:"2 = gaz, 6 = toxique. Ici 3 doublé."},
+  {t:"Matière qui réagit avec l’eau",v:0,f:"C’est la lettre X devant le code (ex. X423)."}]},
+ {q:"Ton premier engagement ?",o:[
+  {t:"Zonage réflexe (50 m / 100 m), approche en tenant compte de la pente et du vent, renseignement sur le produit auprès du conducteur et du CODIS",v:2,f:"Conduite à tenir TMD : se renseigner, caler, périmètre, moyens adaptés à la pente et au vent."},
+  {t:"Ouverture immédiate de la cabine à l’écarteur",v:0,f:"Aucun zonage, aucune protection incendie, atmosphère potentiellement inflammable : suraccident possible."},
+  {t:"Garer le VSR en aval, dans le sens de l’écoulement",v:0,f:"Tu places l’engin et l’équipe dans le liquide inflammable."}]},
+ {q:"L’écoulement progresse vers le fossé. Que demandes-tu ?",o:[
+  {t:"Barrages au sol et protection incendie adaptée (mousse)",v:2,f:"TMD : barrages au sol, extinction adaptée ; citerne non atteinte : jet diffusé ou mousse."},
+  {t:"Rincer la chaussée à grande eau",v:0,f:"Tu étends la nappe et la pollution."},
+  {t:"Rien, ce n’est pas une mission SR",v:0,f:"La protection de l’environnement et incendie fait partie de la sécurisation du site (1er S)."}]},
+ {q:"Avant d’agir sur la cabine pour extraire le conducteur ?",o:[
+  {t:"Caler l’ensemble et stabiliser la cabine, puis PU et PC définis avec le CA SUAP",v:2,f:"Caler le véhicule fait partie de la conduite à tenir TMD, et un PU + un PC par victime."},
+  {t:"Couper la batterie 12 V en premier geste",v:1,f:"Utile en cas de risque d’incendie, mais ça ne remplace ni le calage ni la concertation."},
+  {t:"Basculer la cabine pour la remettre droite",v:0,f:"Un véhicule instable ne doit pas être déplacé, encore moins sans calage."}]}
+]},
+{t:"VL hydrogène, choc arrière",tag:"Énergies · H2",intro:"Un VL portant un logo H2 a été percuté à l’arrière à faible vitesse. Carte grise P3 : « HH ». Un fort sifflement sort sous l’arrière du véhicule. La passagère arrière, ceinturée, consciente, se plaint des cervicales.",st:[
+ {q:"Que t’apprend « HH » sur la carte grise ?",o:[
+  {t:"Pile à combustible : hydrogène sous pression ET composants haute tension",v:2,f:"HH = pile à combustible (FCV), composants HT de 200 à 650 V. H2 = moteur thermique hydrogène."},
+  {t:"Moteur thermique à hydrogène, sans haute tension",v:0,f:"C’est le code H2. HH = pile à combustible."},
+  {t:"Hybride essence",v:0,f:"L’hybride a d’autres codes (ex. EH, EE selon les cas). HH = pile à combustible."}]},
+ {q:"Le sifflement continue. Ta décision ?",o:[
+  {t:"Éloigner tout le monde, contrôler une flamme invisible à la caméra thermique, attendre la vidange (~3 min)",v:2,f:"TPRD : rejet orienté vers le bas, flamme invisible de jour, réservoir vidé en ~3 min."},
+  {t:"Approcher la main pour sentir une éventuelle chaleur",v:0,f:"La flamme H2 est invisible de jour : seule la caméra thermique la révèle."},
+  {t:"Engager immédiatement l’écureuil pour le bilan",v:0,f:"Danger non maîtrisé : personne ne pénètre dans le véhicule tant que le rejet est en cours."}]},
+ {q:"Rejet terminé. Quels 5i en priorité ?",o:[
+  {t:"Contact coupé (électrovannes fermées, relais HT ouverts), smart key à plus de 5 m, ne toucher ni câbles orange ni canalisations",v:2,f:"La coupure du contact est le 1er niveau d’isolement ; canalisations HP parfois rouges, à ne pas toucher."},
+  {t:"Couper les câbles orange pour isoler la batterie",v:0,f:"Interdit : on ne sectionne jamais un vecteur d’énergie."},
+  {t:"Retirer le service plug sans la FAD",v:0,f:"Sans connaissance des préconisations de la FAD : aucune manipulation du service plug."}]},
+ {q:"La passagère est stable. Quelle stratégie proposes-tu ?",o:[
+  {t:"Plan complet dans l’axe 0° du bassin (ex. par le hayon), avec un plan d’urgence prêt",v:2,f:"Victime non critique : plan complet, mais toujours un PU réalisé en parallèle."},
+  {t:"Dégagement d’urgence",v:0,f:"Le danger est maintenant contrôlé et la victime stable."},
+  {t:"Sortie latérale à 90° sans ACT ni collier",v:0,f:"À 90°, l’axe tête-cou-tronc n’est préservé qu’avec ACT + collier, et elle se plaint des cervicales."}]}
+]},
+{t:"VE : signes d’emballement",tag:"Énergies · emballement",intro:"Un VE a heurté une bordure haute, le plancher est enfoncé. Sous le véhicule : crépitements, bruit de gaz sous pression, fumée qui s’épaissit. Le conducteur, conscient, a une jambe coincée par le pédalier.",st:[
+ {q:"Que fais-tu face à ces signes ?",o:[
+  {t:"Dégagement d’urgence du conducteur",v:2,f:"Un emballement thermique en accident impose un dégagement d’urgence des occupants (danger réel, vital, non contrôlable)."},
+  {t:"Plan complet : il est conscient et stable",v:0,f:"Crépitements, gaz sous pression, fumées épaissies : ce sont les signes d’un emballement. Le temps joue contre toi."},
+  {t:"Attendre la FAD avant toute action",v:0,f:"La FAD est essentielle pour la désincarcération, pas pour un dégagement d’urgence face à un emballement."}]},
+ {q:"Le feu s’installe dans la batterie. Comment faire entrer l’eau ?",o:[
+  {t:"Par le dispositif constructeur (trappe thermo-fusible), sinon par les déformations ou parties fondues",v:2,f:"GDO : jamais en ouvrant avec un outil de forcement. Si inefficace, s’abstenir et protéger tiers et environnement."},
+  {t:"Ouvrir le casing au Halligan",v:0,f:"Interdit : jamais d’ouverture au Halligan pour faire entrer l’eau."},
+  {t:"Poser une couverture d’extinction",v:0,f:"À proscrire en emballement de batterie : les gaz restent piégés."}]},
+ {q:"Feu éteint. Que demandes-tu avant de quitter les lieux ?",o:[
+  {t:"Contrôle à la caméra thermique, quarantaine sur sol inerte, information des FDO et du dépanneur",v:2,f:"Réignition possible au-delà de 24 h : quarantaine (lit de sable) et information du dépanneur."},
+  {t:"Remise immédiate au dépanneur, sans consigne particulière",v:0,f:"Le dépanneur doit être informé du risque de reprise de feu."},
+  {t:"Arroser encore 5 minutes puis partir",v:1,f:"Insuffisant : sans contrôle thermique ni quarantaine, la reprise de feu reste possible."}]}
+]},
+{t:"Virage de nuit, route bidirectionnelle",tag:"Zonage · nuit",intro:"RD bidirectionnelle à 80 km/h, nuit, chaussée mouillée. Un VL est dans le fossé juste après un virage sans visibilité. Une victime. Tu arrives en VSR, le VSAV te suit.",st:[
+ {q:"Où places-tu tes premiers moyens de signalisation ?",o:[
+  {t:"Présignalisation avant le virage, pour avertir ceux qui arrivent sans visibilité, et une zone tampon allongée (nuit, pluie)",v:2,f:"La zone d’approche avertit l’usager ; la longueur du tampon dépend de la configuration, de la météo et du jour/nuit."},
+  {t:"Juste après le virage, au plus près de l’accident",v:0,f:"Un usager sortant du virage n’a aucune distance pour s’arrêter : suraccident."},
+  {t:"Une FLU sur le toit du VSR",v:0,f:"La FLU s’utilise uniquement sur les routes à chaussées séparées."}]},
+ {q:"À 80 km/h sur chaussée mouillée, quelle distance de freinage retiens-tu ?",o:[
+  {t:"96 m",v:2,f:"GDO annexe G : 80 km/h = 64 m sur sec, 96 m sur mouillé."},
+  {t:"64 m",v:1,f:"C’est la valeur sur sol sec. Mouillé : 96 m."},
+  {t:"38 m",v:0,f:"C’est 50 km/h sur mouillé."}]},
+ {q:"Le VSR s’arrête. Tes consignes à l’équipage ?",o:[
+  {t:"Roues braquées à l’opposé de la zone de flux, descente côté opposé à la circulation, une vigie face au trafic",v:2,f:"FRO 50 : roues braquées vers l’extérieur du flux, descente côté opposé, vigie possible."},
+  {t:"Roues droites, tout le monde descend vite côté chaussée",v:0,f:"En cas de choc arrière, l’engin serait projeté vers l’accident, et l’équipe descend dans le trafic."},
+  {t:"Moteur coupé, gyrophares éteints pour ne pas éblouir",v:0,f:"De nuit, la signalisation lumineuse doit rester active pour protéger l’équipe."}]},
+ {q:"Un usager s’impatiente et demande quand la route sera rouverte.",o:[
+  {t:"Le renvoyer vers les forces de l’ordre : la régulation et la réouverture ne relèvent pas des SP",v:2,f:"Les SP ne se prononcent jamais sur la réouverture ; ce sont les FDO, avec le COS, après avis de l’exploitant."},
+  {t:"Lui donner une estimation pour le calmer",v:0,f:"Les SP ne se prononcent jamais sur la réouverture."},
+  {t:"Le laisser passer au ralenti par le bas-côté",v:0,f:"La régulation de la circulation incombe aux forces de l’ordre, et tu exposes la zone de travail."}]}
+]},
+{t:"La victime se dégrade",tag:"Commandement · plans",intro:"VL sur ses roues après un choc frontal. La conductrice est incarcérée aux jambes mais stable. Vous travaillez sur un plan complet. Plus tard, le chef VSAV t’annonce qu’elle perd connaissance.",st:[
+ {q:"Au départ, quelle stratégie avais-tu posée ?",o:[
+  {t:"Un plan d’urgence réalisé (pas seulement repéré) et un plan complet, définis en concertation",v:2,f:"Un PU et un PC par victime ; le PU est réalisé pour garantir une sortie à tout moment."},
+  {t:"Seulement le plan complet, la victime étant stable",v:0,f:"Il faut toujours une solution de remplacement : le plan d’urgence."},
+  {t:"Un plan d’urgence qu’on ouvrira si besoin",v:1,f:"Le PU doit être réalisé, pas seulement recherché : sinon tu perds du temps au moment critique."}]},
+ {q:"Elle perd connaissance. Ta décision ?",o:[
+  {t:"Déclencher immédiatement le plan d’urgence",v:2,f:"Perte de connaissance → dégagement rapide (PU). L’état est surveillé en permanence pour pouvoir le déclencher à tout moment."},
+  {t:"Terminer le plan complet, il ne reste que quelques coupes",v:0,f:"La victime est devenue critique : le temps de piégeage doit être réduit."},
+  {t:"Dégagement d’urgence par la vitre, sans plan dur",v:0,f:"Le DU répond à un danger réel, immédiat et non contrôlable (feu, arrêt cardiaque). Ici, le PU est prévu pour ça."}]},
+ {q:"Sur le véhicule, que marques-tu ?",o:[
+  {t:"PU et PC, et l’énergie si désincarcération ; jamais l’état de la victime",v:2,f:"Interdit d’inscrire l’état des victimes sur les véhicules (dignité, réseaux sociaux)."},
+  {t:"« Critique » sur le capot pour informer le SMUR",v:0,f:"Interdit : l’état de la victime ne s’écrit jamais sur le véhicule."},
+  {t:"Rien, ça fait perdre du temps",v:0,f:"Le marquage PU/PC donne la marche à suivre à toute l’équipe."}]},
+ {q:"Qui arrête la stratégie d’extraction ?",o:[
+  {t:"Le COS, en concertation avec les CA SUAP et SR et le médecin SMUR",v:2,f:"La stratégie d’extraction incombe au COS, au regard de l’état de la victime et de l’analyse de la zone."},
+  {t:"Le CA SR seul",v:0,f:"Le CA SR propose ; la décision revient au COS après concertation."},
+  {t:"Le médecin seul",v:1,f:"Le médecin aide le COS à parfaire l’évaluation, mais la stratégie incombe au COS."}]}
+]}
+);
+
 const PHOTOMAN={"apco": {"n": 7, "pages": [7, 11]}, "charte": {"n": 14, "pages": [13, 18]}, "outils": {"n": 6, "pages": [19, 21]}, "batt": {"n": 2, "pages": [23, 24]}, "ceint": {"n": 2, "pages": [25, 25]}, "sieges": {"n": 17, "pages": [27, 31]}, "feuillete": {"n": 7, "pages": [33, 35]}, "trempe": {"n": 5, "pages": [37, 39]}, "jointe": {"n": 2, "pages": [41, 42]}, "stabgen": {"n": 7, "pages": [43, 46]}, "calroues": {"n": 6, "pages": [47, 49]}, "calcote": {"n": 7, "pages": [51, 53]}, "caltoit": {"n": 10, "pages": [55, 57]}, "arrimage": {"n": 6, "pages": [59, 60]}, "porte-serrure": {"n": 22, "pages": [61, 70]}, "porte-charn": {"n": 15, "pages": [71, 74]}, "porte-lat": {"n": 7, "pages": [75, 77]}, "capot": {"n": 6, "pages": [79, 81]}, "coffre-avec": {"n": 9, "pages": [83, 86]}, "coffre-sans": {"n": 8, "pages": [87, 89]}, "tdbgen": {"n": 9, "pages": [91, 94]}, "volant": {"n": 10, "pages": [95, 101]}, "levee": {"n": 10, "pages": [103, 107]}, "poussee": {"n": 9, "pages": [109, 113]}, "pedales": {"n": 10, "pages": [115, 118]}, "reformation": {"n": 10, "pages": [119, 122]}, "tunnel": {"n": 5, "pages": [123, 125]}, "rouesgen": {"n": 7, "pages": [127, 129]}, "demipav": {"n": 10, "pages": [131, 134]}, "demipavc": {"n": 6, "pages": [135, 137]}, "pavillon": {"n": 8, "pages": [139, 142]}, "3eporte": {"n": 10, "pages": [143, 146]}, "voieam": {"n": 10, "pages": [147, 150]}, "laterale": {"n": 12, "pages": [151, 155]}, "cotegen": {"n": 5, "pages": [157, 158]}, "charniere": {"n": 15, "pages": [159, 163]}, "toitgen": {"n": 5, "pages": [165, 167]}, "dpi": {"n": 10, "pages": [169, 173]}, "voile": {"n": 8, "pages": [175, 177]}, "relocgen": {"n": 6, "pages": [179, 180]}, "remiseroues": {"n": 11, "pages": [181, 185]}, "deplacer": {"n": 18, "pages": [187, 191]}, "levage": {"n": 8, "pages": [193, 197]}, "zchantier": {"n": 1, "pages": null, "ext": 1}, "zonage": {"n": 11, "pages": null, "ext": 1}, "axes": {"n": 2, "pages": null, "ext": 1}};
 </script>
 <script>
@@ -1507,7 +1772,7 @@ const CHAP = Object.fromEntries(CHAPITRES);
 const KEY = "agresSR_v1";
 
 /* ---------- Stockage (confort, propre à ce navigateur) ---------- */
-let S = {q:{},cas:{},ch:{},installDismissed:false,days:[],fm:{},fv:{},fdj:null,lastDaily:null};
+let S = {q:{},cas:{},ch:{},installDismissed:false,days:[],fm:{},fv:{},fdj:null,lastDaily:null,mm:{},mh:false,gr:{},lastExport:null};
 try{ const raw = localStorage.getItem(KEY); if(raw) S = Object.assign(S, JSON.parse(raw)); }catch(e){}
 function save(){ try{ localStorage.setItem(KEY, JSON.stringify(S)); }catch(e){} }
 
@@ -1576,7 +1841,8 @@ function errorsList(){ return QUIZ.filter(q=>S.q[q.id] && S.q[q.id].last===false
 
 /* ---------- Routage ---------- */
 let cur = {tab:"accueil"};
-const TABS = ["accueil","fiches","quiz","cas","chiffres","lexique"];
+const TABS = ["accueil","memo","fiches","quiz","cas","outils","chiffres","lexique","formateur","sauvegarde"];
+const NAVOF = {chiffres:"outils",lexique:"outils",formateur:"outils",sauvegarde:"outils"};
 function go(tab, extra){
   cur = Object.assign({tab}, extra||{});
   stopTimer(); if(LB){ LB=null; drawLb(); }
@@ -1587,15 +1853,19 @@ window.addEventListener("hashchange", ()=>{ const t=location.hash.slice(1); if(T
 document.querySelectorAll("nav.tabs button").forEach(b=>b.addEventListener("click",()=>go(b.dataset.tab)));
 
 function render(){
-  document.querySelectorAll("nav.tabs button").forEach(b=>b.setAttribute("aria-current", b.dataset.tab===cur.tab?"page":"false"));
+  document.querySelectorAll("nav.tabs button").forEach(b=>b.setAttribute("aria-current", b.dataset.tab===(NAVOF[cur.tab]||cur.tab)?"page":"false"));
   updateChip();
   const v = $("#view");
   if(cur.tab==="accueil") v.innerHTML = vAccueil();
   else if(cur.tab==="fiches") v.innerHTML = cur.id ? vFiche(cur.id) : vFiches();
   else if(cur.tab==="quiz") v.innerHTML = cur.run ? vQuestion() : (cur.result ? vResult() : vQuizSetup());
   else if(cur.tab==="cas") v.innerHTML = cur.cas!=null ? vCas() : vCasList();
-  else if(cur.tab==="chiffres") v.innerHTML = vChiffres();
-  else if(cur.tab==="lexique") v.innerHTML = vLexique();
+  else if(cur.tab==="memo") v.innerHTML = cur.memo ? vMemo(cur.memo) : vMemoList();
+  else if(cur.tab==="outils") v.innerHTML = vOutils();
+  else if(cur.tab==="formateur") v.innerHTML = vFormateur();
+  else if(cur.tab==="sauvegarde") v.innerHTML = vSauvegarde();
+  else if(cur.tab==="chiffres") v.innerHTML = backOutils + vChiffres();
+  else if(cur.tab==="lexique") v.innerHTML = backOutils + vLexique();
   bind();
   linkify(v);
   if($("#gal")) loadGallery($("#gal").dataset.f);
@@ -1637,7 +1907,7 @@ function vAccueil(){
       <button data-act="errors" ${err?"":"disabled"}><b>Mes erreurs</b><span>${err?err+" question"+(err>1?"s":"")+" à retravailler":"Rien à revoir pour l’instant"}</span></button>
       <button data-act="exam"><b>Examen blanc</b><span>30 questions, 40 s chacune</span></button>
       <button data-act="sudden"><b>Mort subite</b><span>Stop à la première erreur</span></button>
-      <button data-goto="chiffres"><b>Chiffres clés</b><span>${CHIFFRES.length} valeurs à connaître</span></button></section>`;
+      <button data-goto="memo"><b>Fiches mémo</b><span>${MEMOS.length} mémos, l’essentiel en un écran</span></button></section>`;
   /* Points faibles */
   const weakCh = CHAPITRES.map(([k,nm])=>Object.assign({k,nm},chapPct(k))).filter(c=>c.n && c.seen>=3 && c.pSeen<70).sort((a,b)=>a.pSeen-b.pSeen).slice(0,4);
   const weakF = FICHES.filter(x=>S.fm[x.id]===-1);
@@ -1900,6 +2170,143 @@ function vCas(){
   return html + `</section>`;
 }
 
+/* ---------- Fiches mémo ---------- */
+function vMemoList(){
+  const known = MEMOS.filter(m=>S.mm[m.id]).length;
+  let html = `<div><div class="eyebrow">${MEMOS.length} mémos · ${known} connu${known>1?"s":""}</div><h2 class="sec-title">Fiches mémo</h2><p class="muted" style="margin:4px 0 0">L’essentiel en un écran. En mode révision, les réponses sont masquées : touche-les pour vérifier.</p></div>
+  <section class="card"><div class="mastery chips"><button data-act="memo-hide" aria-pressed="${!!S.mh}">Mode révision : réponses masquées</button></div></section>
+  <div class="flist">`;
+  let last=null;
+  MEMOS.forEach(m=>{
+    if(m.tag!==last){ html += `<div class="chapter-h">${esc(m.tag)}</div>`; last=m.tag; }
+    html += `<button data-memo="${m.id}"><span><span class="ft">${esc(m.t)}${S.mm[m.id]?'<span class="fstat ok">✓ connu</span>':""}</span><span class="fc">${esc(m.mn)}</span></span><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 6l6 6-6 6"/></svg></button>`;
+  });
+  return html + `</div>`;
+}
+function vMemo(id){
+  const m = MEMOS.find(x=>x.id===id); if(!m) return vMemoList();
+  const i = MEMOS.indexOf(m), prev=MEMOS[i-1], next=MEMOS[i+1];
+  markDay(); save();
+  let html = `<div class="backbar"><button class="btn ghost" data-act="memo-list"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 6l-6 6 6 6"/></svg>Mémos</button><span class="pill">${esc(m.tag)}</span></div>
+  <article class="memo card ${S.mh?"hide":""}" id="memoCard"><h2 class="sec-title" style="margin:0 0 8px">${esc(m.t)}</h2><div class="mn">${esc(m.mn)}</div>`;
+  if(m.svg) html += `<figure class="schema">${m.svg}<figcaption class="swipe">← fais glisser le schéma →</figcaption></figure>`;
+  m.sec.forEach(([h,items])=>{ html += `<h3>${esc(h)}</h3><ul>${items.map(x=>`<li>${x}</li>`).join("")}</ul>`; });
+  html += `</article>
+  <div class="row">${S.mh?`<button class="btn" data-act="memo-reveal">Tout révéler</button>`:""}<button class="btn ${S.mh?"ghost":""}" data-act="memo-hide">${S.mh?"Afficher les réponses":"Masquer les réponses pour me tester"}</button></div>
+  <section class="card"><div class="mastery chips"><button class="ok" data-act="memo-known" aria-pressed="${!!S.mm[m.id]}">Je la connais</button></div>
+  ${m.f && m.f.length ? `<div class="eyebrow" style="margin:12px 0 6px">Pour aller plus loin</div><div class="chips">${m.f.map(fid=>{ const f=FICHES.find(x=>x.id===fid); return f?`<button data-fiche="${f.id}">${esc(f.t)}</button>`:""; }).join("")}</div>`:""}</section>
+  <div class="row" style="justify-content:space-between">${prev?`<button class="btn" data-memo="${prev.id}">‹ ${esc(prev.t)}</button>`:"<span></span>"}${next?`<button class="btn" data-memo="${next.id}">${esc(next.t)} ›</button>`:""}</div>`;
+  return html;
+}
+
+/* ---------- Outils ---------- */
+function vOutils(){
+  const nGr = Object.values(S.gr||{}).reduce((a,o)=>a+Object.keys(o).length,0);
+  return `<div><div class="eyebrow">Tout le reste</div><h2 class="sec-title">Outils</h2></div>
+  <section class="quick" aria-label="Outils">
+    <button class="hot" data-goto="formateur"><b>Espace formateur</b><span>Animer une manœuvre, observer les SR2${nGr?" · "+nGr+" grille"+(nGr>1?"s":""):""}</span></button>
+    <button data-goto="chiffres"><b>Chiffres clés</b><span>${CHIFFRES.length} valeurs à connaître</span></button>
+    <button data-goto="lexique"><b>Lexique</b><span>Sigles et abréviations</span></button>
+    <button data-goto="sauvegarde"><b>Sauvegarde</b><span>${S.lastExport!=null?"Dernière : "+fmtDay(S.lastExport):"Jamais sauvegardée"}</span></button>
+  </section>`;
+}
+function fmtDay(d){ try{ return new Date(d*DAYMS).toLocaleDateString("fr-FR",{day:"numeric",month:"short",year:"numeric"}); }catch(e){ return ""; } }
+const backOutils = `<div class="backbar"><button class="btn ghost" data-goto="outils"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 6l-6 6 6 6"/></svg>Outils</button></div>`;
+
+/* ---------- Espace formateur ---------- */
+const TECH_CH = ["gen","stab","ouv","tdb","ref","roues","cote","toit","spe"];
+const CRIT_SECU = ["Zonage du chantier respecté : travail 3-5 m, parc matériel, débris hors axe de sortie","EPI complets, lunettes baissées, masque si découpe de vitrage","Victime protégée (bouclier, couverture) à chaque action de force","Outil déplacé fermé vers le bas, jamais de personnel entre l’outil et le véhicule","Calage contrôlé après chaque découpe ou retrait"];
+const CRIT_CMD = ["Annonce la technique et la stratégie (PU / PC) à l’équipe","Ordres clairs, dans l’ordre, avec contrôle de leur exécution","Dégarnissage et charte graphique faits avant toute coupe (CA SR)"];
+function techCrit(f){
+  const out=[];
+  f.b.forEach(([h,items])=>{ if(/Déroulé|Technique|Points clés|Règles/.test(h)) items.forEach(x=>{ let t=strip(x).replace(/\s+/g," ").trim(); if(t.length>120) t=t.slice(0,117).replace(/\s+\S*$/,"")+"…"; out.push(t); }); });
+  if(!out.length) f.b.forEach(([h])=>out.push(h+" : conforme à la fiche"));
+  return out.slice(0,10);
+}
+function gridOf(f){ return [["Sécurité","s",CRIT_SECU],["Technique","t",techCrit(f)],["Commandement","c",CRIT_CMD]]; }
+function vFormateur(){
+  const id = cur.ft;
+  if(!id){
+    let html = backOutils + `<div><div class="eyebrow">Stages intégrés, FMPA</div><h2 class="sec-title">Espace formateur</h2><p class="muted" style="margin:4px 0 0">Choisis une technique : fiche d’animation pour la conduire, grille pour observer tes stagiaires.</p></div>
+    <details class="card"><summary><b>Trame d’une séance de manœuvre</b> <span class="muted">· proposition à adapter</span></summary>
+      <ol class="trame"><li><b>Briefing</b> : objectif de la manœuvre, consignes de sécurité, rôle de chacun (CA, équipiers, écureuil, plastron).</li><li><b>Démonstration commentée</b> par le formateur, en annonçant les ordres du CA.</li><li><b>Mise en œuvre</b> par les stagiaires, rôles tournants ; tu observes avec la grille.</li><li><b>Débriefing</b> : le stagiaire s’exprime d’abord, puis le groupe, puis le formateur.</li></ol></details>`;
+    TECH_CH.forEach(ch=>{
+      const l = FICHES.filter(f=>f.ch===ch); if(!l.length) return;
+      html += `<div class="chapter-h" style="border:1px solid var(--line);border-radius:var(--r) var(--r) 0 0;margin-bottom:-12px">${esc(CHAP[ch])}</div><div class="flist" style="border-radius:0 0 var(--r) var(--r)">${l.map(f=>{ const n=Object.keys((S.gr||{})[f.id]||{}).length; return `<button data-ft="${f.id}"><span><span class="ft">${esc(f.t)}${n?`<span class="fstat ok">${n} grille${n>1?"s":""}</span>`:""}</span></span><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 6l6 6-6 6"/></svg></button>`; }).join("")}</div>`;
+    });
+    return html;
+  }
+  const f = FICHES.find(x=>x.id===id); if(!f){ cur.ft=null; return vFormateur(); }
+  const mode = cur.fmode || "anim";
+  let html = `<div class="backbar"><button class="btn ghost" data-act="ft-back"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 6l-6 6 6 6"/></svg>Techniques</button><span class="pill">${esc(CHAP[f.ch])}</span></div>
+  <div><div class="eyebrow">Espace formateur</div><h2 class="sec-title">${esc(f.t)}</h2></div>
+  <div class="seg seg2"><button data-fmode="anim" aria-pressed="${mode==="anim"}"><b>Animer</b><span>Fiche d’animation</span></button><button data-fmode="obs" aria-pressed="${mode==="obs"}"><b>Observer</b><span>Grille par stagiaire</span></button></div>`;
+  if(mode==="anim"){
+    html += `<section class="card"><div class="eyebrow">Objectif</div><p style="margin:6px 0 0">${f.cle}</p></section>
+    <section class="card blk"><h3>Mise en place</h3><ul><li>Véhicule stabilisé avant toute manœuvre : blocage, calage, étaiement si nécessaire.</li><li>Chantier : zone de travail 3-5 m, parc matériel, parc débris hors axe de sortie.</li><li>EPI complets, lunettes ; masque FFP3 si découpe de vitrage (FRO 50).</li><li>Plastron ou mannequin protégé : bouclier, couverture.</li></ul></section>`;
+    f.b.forEach(([h,items])=>{ html += `<section class="card blk"><h3>${esc(h)}</h3><ul>${items.map(x=>`<li>${x}</li>`).join("")}</ul></section>`; });
+    html += `<section class="ordres"><div class="hd">Ordres à faire donner au stagiaire CA</div>${f.o.length?f.o.map(o=>`<p>${esc(o)}</p>`).join(""):`<p>Pas d’exemple sur cette fiche : fais formuler les ordres par le stagiaire à partir du déroulé.</p>`}</section>`;
+    if(f.p.length) html += `<section class="pieges"><div class="hd">Points de vigilance</div><ul>${f.p.map(p=>`<li>${esc(p)}</li>`).join("")}</ul></section>`;
+    html += `<section class="card blk"><h3>Questions de débriefing</h3><ul><li>Qu’est-ce qui a bien fonctionné ?</li><li>Qu’est-ce qui t’a posé problème, et pourquoi ?</li><li>La sécurité de l’équipe et de la victime a-t-elle été assurée à chaque instant ?</li><li>Le calage a-t-il été contrôlé après chaque coupe ?</li><li>Si c’était à refaire, que changerais-tu ?</li></ul></section>
+    <div class="row"><button class="btn" data-fiche="${f.id}">Fiche complète avec photos</button><button class="btn primary" data-fmode="obs">Passer à l’observation</button></div>`;
+    return html;
+  }
+  const G = (S.gr[f.id] = S.gr[f.id] || {});
+  const names = Object.keys(G);
+  const sel = cur.gs && G[cur.gs] ? cur.gs : null;
+  html += `<section class="card"><div class="eyebrow" style="margin-bottom:8px">Stagiaires observés</div>
+    <div class="addrow"><input id="inStag" type="text" placeholder="Nom ou prénom du stagiaire" autocomplete="off" maxlength="40"><button class="btn primary" data-act="stag-add">Ajouter</button></div>
+    ${names.length?`<div class="chips" style="margin-top:10px">${names.map(n=>{ const g=G[n]; const done=Object.keys(g.r).length; return `<button data-gs="${esc(n)}" aria-pressed="${n===sel}">${esc(n)} <span class="muted">${done}</span></button>`; }).join("")}</div>`:`<p class="muted" style="font-size:13px;margin:10px 0 0">Ajoute un stagiaire pour remplir sa grille. Tout reste sur ce téléphone.</p>`}</section>`;
+  if(!sel) return html;
+  const g = G[sel];
+  html += `<div class="legend"><span><b>A</b> acquis</span><span><b>ECA</b> en cours</span><span><b>NA</b> non acquis</span></div>`;
+  gridOf(f).forEach(([gname,k,list])=>{
+    html += `<section class="card grid"><h3>${gname}</h3>${list.map((c,i)=>{ const key=k+i, v=g.r[key]; return `<div class="crit"><span>${esc(c)}</span><span class="abc">${["A","ECA","NA"].map(x=>`<button data-crit="${key}" data-val="${x}" class="v-${x}" aria-pressed="${v===x}" aria-label="${esc(c)} : ${x}">${x}</button>`).join("")}</span></div>`; }).join("")}</section>`;
+  });
+  const t = gridTotals(f,g);
+  html += `<section class="card"><div class="eyebrow">Bilan · ${t.A} A · ${t.ECA} ECA · ${t.NA} NA · ${t.left} non évalué${t.left>1?"s":""}</div>
+    <label for="inNote" class="muted" style="font-size:13px;display:block;margin:10px 0 4px">Observations, axes de progrès</label>
+    <textarea id="inNote" rows="4" placeholder="Ex. calage primaire oublié avant l’entrée de l’écureuil">${esc(g.n||"")}</textarea>
+    <div class="row" style="margin-top:10px"><button class="btn primary" data-act="grid-copy">Copier le bilan</button>${navigator.share?`<button class="btn" data-act="grid-share">Partager</button>`:""}<button class="btn ghost" data-act="grid-del">Supprimer ce stagiaire</button></div>
+    ${cur.confirmDel?`<div class="fb ko" style="margin-top:10px"><b class="v">Supprimer la grille de ${esc(sel)} ?</b><div class="row" style="margin-top:8px"><button class="btn primary" data-act="grid-del-yes">Oui, supprimer</button><button class="btn" data-act="grid-del-no">Annuler</button></div></div>`:""}</section>`;
+  return html;
+}
+function gridTotals(f,g){ const t={A:0,ECA:0,NA:0,left:0}; gridOf(f).forEach(([,k,l])=>l.forEach((_,i)=>{ const v=g.r[k+i]; if(v) t[v]++; else t.left++; })); return t; }
+function gridText(f,name){
+  const g=S.gr[f.id][name]; const t=gridTotals(f,g);
+  let s = `Observation — ${f.t}\nStagiaire : ${name} · ${fmtDay(g.d)}\nBilan : ${t.A} A · ${t.ECA} ECA · ${t.NA} NA${t.left?" · "+t.left+" non évalué(s)":""}\n`;
+  gridOf(f).forEach(([gname,k,l])=>{ s += `\n${gname}\n`; l.forEach((c,i)=>{ s += `- [${g.r[k+i]||" "}] ${c}\n`; }); });
+  if(g.n) s += `\nObservations : ${g.n}\n`;
+  return s;
+}
+function copyText(txt, ok){
+  const done=()=>toast(ok||"Copié");
+  try{ if(navigator.clipboard && navigator.clipboard.writeText){ navigator.clipboard.writeText(txt).then(done,()=>fallbackCopy(txt,done)); return; } }catch(e){}
+  fallbackCopy(txt,done);
+}
+function fallbackCopy(txt,done){ const ta=document.createElement("textarea"); ta.value=txt; ta.style.position="fixed"; ta.style.opacity="0"; document.body.appendChild(ta); ta.select(); try{ document.execCommand("copy"); done(); }catch(e){ toast("Copie impossible"); } ta.remove(); }
+
+/* ---------- Sauvegarde ---------- */
+function backupJSON(){ return JSON.stringify({app:"revisions-sr",v:1,date:new Date().toISOString(),data:S}); }
+function vSauvegarde(){
+  const st = statsFor(QUIZ);
+  return backOutils + `<div><div class="eyebrow">Ta progression est enregistrée dans ce navigateur</div><h2 class="sec-title">Sauvegarde</h2><p class="muted" style="margin:4px 0 0">Changement de téléphone, cache vidé, appli réinstallée : avec une sauvegarde, tu retrouves tout.</p></div>
+  <section class="card"><div class="eyebrow">Contenu actuel</div><p style="margin:6px 0 0">${st.seen} questions vues · série de ${streak()} j · ${Object.keys(S.fm).length} fiche${Object.keys(S.fm).length>1?"s":""} marquée${Object.keys(S.fm).length>1?"s":""} · ${Object.keys(S.mm).length} mémo${Object.keys(S.mm).length>1?"s":""} connu${Object.keys(S.mm).length>1?"s":""} · ${Object.values(S.gr).reduce((a,o)=>a+Object.keys(o).length,0)} grille(s) formateur</p>
+  <p class="muted" style="font-size:13px;margin:6px 0 0">Dernière sauvegarde : ${S.lastExport!=null?fmtDay(S.lastExport):"jamais"}</p></section>
+  <section class="card"><h3 style="margin:0 0 6px">Sauvegarder</h3><p class="muted" style="font-size:14px;margin:0 0 10px">Télécharge un fichier, ou copie le code et envoie-le-toi par mail ou message.</p>
+    <div class="row"><button class="btn primary" data-act="bk-file">Télécharger le fichier</button><button class="btn" data-act="bk-copy">Copier le code</button></div></section>
+  <section class="card"><h3 style="margin:0 0 6px">Restaurer</h3><p class="muted" style="font-size:14px;margin:0 0 10px">Remplace la progression de ce téléphone par celle de la sauvegarde.</p>
+    <label class="btn" for="inFile" style="cursor:pointer">Choisir un fichier de sauvegarde</label><input id="inFile" type="file" accept=".json,application/json" hidden>
+    <label for="inCode" class="muted" style="font-size:13px;display:block;margin:12px 0 4px">Ou colle ton code ici</label>
+    <textarea id="inCode" rows="3" placeholder='{"app":"revisions-sr", …}'></textarea>
+    <div class="row" style="margin-top:10px"><button class="btn" data-act="bk-paste">Restaurer depuis le code</button></div>
+    ${cur.pending?`<div class="fb ko" style="margin-top:10px"><b class="v">Remplacer ta progression actuelle ?</b>Sauvegarde du ${esc(new Date(cur.pending.date).toLocaleDateString("fr-FR"))} : ${Object.keys(cur.pending.data.q||{}).length} questions vues.<div class="row" style="margin-top:8px"><button class="btn primary" data-act="bk-yes">Oui, restaurer</button><button class="btn" data-act="bk-no">Annuler</button></div></div>`:""}</section>`;
+}
+function parseBackup(txt){
+  try{ const o=JSON.parse(txt); if(o && o.app==="revisions-sr" && o.data && typeof o.data==="object" && o.data.q) return o; }catch(e){}
+  toast("Ce n’est pas une sauvegarde Révisions SR"); return null;
+}
+
 /* ---------- Chiffres clés ---------- */
 function vChiffres(){
   const mode = cur.cm || "flash";
@@ -1974,7 +2381,7 @@ const ACR_RE = new RegExp("(?<![A-Za-zÀ-ÿ0-9’'-])(" + Object.keys(ACR).sort(
 function linkify(root){
   if(!root) return;
   const tw=document.createTreeWalker(root,NodeFilter.SHOW_TEXT,{acceptNode:n=>{
-    let p=n.parentElement; while(p && p!==root){ if(p.tagName==="BUTTON"||p.tagName==="SELECT"||p.tagName==="INPUT"||p.classList.contains("acr")||p.classList.contains("noacr")) return NodeFilter.FILTER_REJECT; p=p.parentElement; }
+    let p=n.parentElement; while(p && p!==root){ if(p.tagName==="BUTTON"||p.tagName==="SELECT"||p.tagName==="INPUT"||p.tagName==="TEXTAREA"||p instanceof SVGElement||(p.tagName==="EM"&&p.closest(".memo"))||p.classList.contains("acr")||p.classList.contains("noacr")) return NodeFilter.FILTER_REJECT; p=p.parentElement; }
     ACR_RE.lastIndex=0; return ACR_RE.test(n.nodeValue)?NodeFilter.FILTER_ACCEPT:NodeFilter.FILTER_SKIP; }});
   const nodes=[]; while(tw.nextNode()) nodes.push(tw.currentNode);
   nodes.forEach(n=>{
@@ -2022,6 +2429,15 @@ function bind(){
   v.querySelectorAll("[data-seq]").forEach(b=>b.onclick=()=>{ const P=cur.run.list[cur.run.i]; P.seq.push(+b.dataset.seq); render(); });
   v.querySelectorAll("[data-cas]").forEach(b=>b.onclick=()=>{ cur={tab:"cas",cas:+b.dataset.cas,step:0,pts:0,choice:null,order:null}; render(); window.scrollTo(0,0); });
   v.querySelectorAll("[data-choice]").forEach(b=>b.onclick=()=>{ if(cur.choice!=null) return; cur.choice=+b.dataset.choice; markDay(); save(); cur.pts+=CAS[cur.cas].st[cur.step].o[cur.choice].v; render(); const fb=$(".fb"); if(fb) fb.scrollIntoView({behavior:"smooth",block:"nearest"}); });
+  v.querySelectorAll("[data-memo]").forEach(b=>b.onclick=()=>{ cur={tab:"memo",memo:b.dataset.memo}; try{ history.replaceState(null,"","#memo"); }catch(e){} render(); window.scrollTo(0,0); });
+  v.querySelectorAll(".memo.hide em").forEach(e=>e.onclick=()=>e.classList.toggle("rv"));
+  v.querySelectorAll("[data-ft]").forEach(b=>b.onclick=()=>{ cur={tab:"formateur",ft:b.dataset.ft,fmode:"anim"}; render(); window.scrollTo(0,0); });
+  v.querySelectorAll("[data-fmode]").forEach(b=>b.onclick=()=>{ cur.fmode=b.dataset.fmode; cur.confirmDel=false; render(); window.scrollTo(0,0); });
+  v.querySelectorAll("[data-gs]").forEach(b=>b.onclick=()=>{ cur.gs=b.dataset.gs; cur.confirmDel=false; render(); });
+  v.querySelectorAll("[data-crit]").forEach(b=>b.onclick=()=>{ const g=S.gr[cur.ft][cur.gs]; const k=b.dataset.crit, x=b.dataset.val; if(g.r[k]===x) delete g.r[k]; else g.r[k]=x; g.d=today(); save(); const y=window.scrollY; render(); window.scrollTo(0,y); });
+  const inN=$("#inNote"); if(inN) inN.oninput=()=>{ const g=S.gr[cur.ft][cur.gs]; g.n=inN.value; save(); };
+  const inS=$("#inStag"); if(inS) inS.onkeydown=e=>{ if(e.key==="Enter") act("stag-add"); };
+  const inF=$("#inFile"); if(inF) inF.onchange=()=>{ const file=inF.files&&inF.files[0]; if(!file) return; const rd=new FileReader(); rd.onload=()=>{ const o=parseBackup(String(rd.result)); if(o){ cur.pending=o; render(); } }; rd.readAsText(file); };
   v.querySelectorAll("[data-ff]").forEach(b=>b.onclick=()=>{ cur.ff=b.dataset.ff; render(); });
   v.querySelectorAll("[data-fm]").forEach(b=>b.onclick=()=>{ const k=+b.dataset.fm; if(S.fm[cur.id]===k) delete S.fm[cur.id]; else S.fm[cur.id]=k; save(); render(); toast(S.fm[cur.id]===1?"Fiche marquée maîtrisée":S.fm[cur.id]===-1?"Fiche à retravailler":"Marque retirée"); });
   v.querySelectorAll("[data-cm]").forEach(b=>b.onclick=()=>{ cur={tab:"chiffres",cm:b.dataset.cm}; render(); });
@@ -2039,13 +2455,29 @@ function act(a){
     case "dismiss": S.installDismissed=true; save(); render(); break;
     case "exam": setup.themes=[]; startQuiz("exam"); break;
     case "daily": startQuiz("jour"); break;
+    case "memo-list": cur={tab:"memo"}; render(); window.scrollTo(0,0); break;
+    case "memo-hide": S.mh=!S.mh; save(); render(); break;
+    case "memo-reveal": document.querySelectorAll(".memo em").forEach(e=>e.classList.add("rv")); break;
+    case "memo-known": if(S.mm[cur.memo]) delete S.mm[cur.memo]; else S.mm[cur.memo]=today(); save(); render(); toast(S.mm[cur.memo]?"Mémo marqué connu":"Marque retirée"); break;
+    case "ft-back": cur={tab:"formateur"}; render(); window.scrollTo(0,0); break;
+    case "stag-add": { const i=$("#inStag"); const n=(i&&i.value||"").trim().slice(0,40); if(!n){ toast("Écris un nom"); break; } const G=(S.gr[cur.ft]=S.gr[cur.ft]||{}); if(!G[n]) G[n]={d:today(),r:{},n:""}; save(); cur.gs=n; render(); break; }
+    case "grid-copy": { const f=FICHES.find(x=>x.id===cur.ft); copyText(gridText(f,cur.gs),"Bilan copié"); break; }
+    case "grid-share": { const f=FICHES.find(x=>x.id===cur.ft); try{ navigator.share({title:"Observation "+cur.gs, text:gridText(f,cur.gs)}).catch(()=>{}); }catch(e){} break; }
+    case "grid-del": cur.confirmDel=true; render(); break;
+    case "grid-del-no": cur.confirmDel=false; render(); break;
+    case "grid-del-yes": delete S.gr[cur.ft][cur.gs]; save(); cur.gs=null; cur.confirmDel=false; render(); toast("Grille supprimée"); break;
+    case "bk-file": { const txt=backupJSON(); try{ const blob=new Blob([txt],{type:"application/json"}); const a=document.createElement("a"); a.href=URL.createObjectURL(blob); a.download="revisions-sr-sauvegarde-"+new Date().toISOString().slice(0,10)+".json"; document.body.appendChild(a); a.click(); setTimeout(()=>{ URL.revokeObjectURL(a.href); a.remove(); },1000); S.lastExport=today(); save(); render(); toast("Fichier téléchargé"); }catch(e){ copyText(txt,"Téléchargement impossible : code copié"); } break; }
+    case "bk-copy": copyText(backupJSON(),"Code de sauvegarde copié"); S.lastExport=today(); save(); render(); break;
+    case "bk-paste": { const t=$("#inCode"); const o=parseBackup(t?t.value.trim():""); if(o){ cur.pending=o; render(); } break; }
+    case "bk-no": cur.pending=null; render(); break;
+    case "bk-yes": { const keep=S.installDismissed; S=Object.assign({q:{},cas:{},ch:{},days:[],fm:{},fv:{},fdj:null,lastDaily:null,mm:{},mh:false,gr:{},lastExport:null}, cur.pending.data); S.installDismissed=keep; save(); cur={tab:"sauvegarde"}; updateChip(); render(); toast("Progression restaurée"); break; }
     case "cas-random": { const i=casAuHasard(); cur={tab:"cas",cas:i,step:0,pts:0,choice:null,order:null}; try{ history.replaceState(null,"","#cas"); }catch(e){} render(); window.scrollTo(0,0); break; }
     case "training": setup.mode="training"; go("quiz"); break;
     case "errors": startQuiz("errors"); break;
     case "sudden": startQuiz("sudden"); break;
     case "reset": cur.confirmReset=true; render(); break;
     case "reset-no": cur.confirmReset=false; render(); break;
-    case "reset-yes": S.q={}; S.cas={}; S.days=[]; S.fm={}; S.fv={}; S.fdj=null; S.lastDaily=null; save(); updateChip(); cur.confirmReset=false; render(); toast("Progression effacée"); break;
+    case "reset-yes": S.q={}; S.cas={}; S.days=[]; S.fm={}; S.fv={}; S.fdj=null; S.lastDaily=null; S.mm={}; save(); updateChip(); cur.confirmReset=false; render(); toast("Progression effacée"); break;
     case "back-fiches": cur.id=null; render(); window.scrollTo(0,0); break;
     case "all-themes": setup.themes=[]; render(); break;
     case "start": startQuiz(setup.mode); break;

@@ -103,6 +103,31 @@ nav.tabs button[aria-current="page"]{color:var(--accent);font-weight:700}
 .quick button b{font-family:var(--f-display);font-size:20px;font-weight:700}
 .quick button span{font-size:13px;color:var(--muted)}
 .quick button.hot{border-color:var(--accent);box-shadow:inset 4px 0 0 var(--accent)}
+.today-card{background:var(--surface);border:2px solid var(--accent);border-radius:var(--r);padding:16px;display:grid;gap:10px}
+.today-card h3{font-family:var(--f-display);font-size:24px;margin:0}
+.today-card .sub{font-size:14px;color:var(--muted);margin:0}
+.today-card.done{border-color:var(--ok)}
+.dots{display:flex;gap:5px;margin-top:12px;flex-wrap:wrap}
+.dots i{width:14px;height:14px;border-radius:3px;background:var(--surface2);border:1px solid var(--line);display:block}
+.dots i.on{background:var(--ok);border-color:var(--ok)}
+.dots i.now{outline:2px solid var(--mark);outline-offset:1px}
+.fdj{all:unset;cursor:pointer;display:block;background:var(--surface);border:1px solid var(--line);border-left:6px solid var(--mark);border-radius:var(--r);padding:14px}
+.fdj:focus-visible{outline:3px solid var(--mark)}
+.fdj b{font-family:var(--f-display);font-size:21px;display:block;margin:2px 0 4px}
+.fdj span.c{font-size:14px;color:var(--muted);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.weak{display:flex;flex-direction:column;border:1px solid var(--line);border-radius:var(--r);background:var(--surface);overflow:hidden}
+.weak button{all:unset;cursor:pointer;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:10px;padding:12px 14px;border-top:1px solid var(--line);align-items:center;font-size:15px}
+.weak button:first-child{border-top:0}
+.weak button:focus-visible{outline:3px solid var(--mark);outline-offset:-3px}
+.weak .k{font-family:var(--f-mono);font-size:12px;color:var(--muted)}
+.bars button.bar{all:unset;cursor:pointer;display:grid;grid-template-columns:minmax(0,1fr) 110px 42px;gap:10px;align-items:center;font-size:14px;padding:3px 0}
+.bars button.bar:focus-visible{outline:3px solid var(--mark)}
+.fstat{display:inline-block;font-family:var(--f-mono);font-size:11px;padding:1px 6px;border-radius:999px;margin-left:6px;vertical-align:2px;font-weight:600}
+.fstat.rw{background:var(--bad-soft);color:var(--bad)}
+.fstat.ok{background:var(--ok-soft);color:var(--ok)}
+.mastery{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.mastery button[aria-pressed="true"].rw{background:var(--bad);border-color:var(--bad);color:#fff}
+.mastery button[aria-pressed="true"].ok{background:var(--ok);border-color:var(--ok);color:#fff}
 .plan{display:flex;flex-direction:column;gap:0;border:1px solid var(--line);border-radius:var(--r);overflow:hidden;background:var(--surface)}
 .plan .d{display:grid;grid-template-columns:64px 1fr;gap:10px;padding:10px 14px;border-top:1px solid var(--line);align-items:center}
 .plan .d:first-child{border-top:0}
@@ -249,14 +274,14 @@ nav.tabs button[aria-current="page"]{color:var(--accent);font-weight:700}
   .filters{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}
   .case-list{grid-template-columns:1fr 1fr}
   .quick{grid-template-columns:repeat(3,1fr)}
-  .seg{grid-template-columns:repeat(4,1fr)}
+  .seg{grid-template-columns:repeat(3,1fr)}
 }
 @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
 </style>
 
 <header class="top"><div class="wrap">
-  <div class="brand"><div class="badge-sr" aria-hidden="true">SR</div><div><h1>Agrès SR</h1><small>Révision chef d’agrès secours routier</small></div></div>
-  <span class="chip-j" id="chipJ">J-?</span>
+  <div class="brand"><div class="badge-sr" aria-hidden="true">SR</div><div><h1>Agrès SR</h1><small>Entraînement chef d’agrès secours routier</small></div></div>
+  <span class="chip-j" id="chipJ" title="Jours d’entraînement d’affilée">…</span>
 </div></header>
 
 <main><div class="wrap" id="view"></div></main>
@@ -1479,16 +1504,55 @@ const strip = s => String(s).replace(/<[^>]+>/g,"");
 const norm = s => strip(s).toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g,"");
 const shuffle = a => { a=a.slice(); for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];} return a; };
 const CHAP = Object.fromEntries(CHAPITRES);
-const STAGE = new Date(2026,10,4,8,0,0); // 4 novembre 2026, 8h
 const KEY = "agresSR_v1";
 
 /* ---------- Stockage (confort, propre à ce navigateur) ---------- */
-let S = {q:{},cas:{},ch:{},installDismissed:false};
+let S = {q:{},cas:{},ch:{},installDismissed:false,days:[],fm:{},fv:{},fdj:null,lastDaily:null};
 try{ const raw = localStorage.getItem(KEY); if(raw) S = Object.assign(S, JSON.parse(raw)); }catch(e){}
 function save(){ try{ localStorage.setItem(KEY, JSON.stringify(S)); }catch(e){} }
 
 function hash(str){ let h=5381; for(let i=0;i<str.length;i++){h=((h<<5)+h+str.charCodeAt(i))|0;} return "q"+(h>>>0).toString(36); }
 QUIZ.forEach(q=>{ q.id = hash(q.q); });
+
+/* ---------- Jours, régularité, répétition espacée ---------- */
+const DAYMS = 86400000;
+function today(){ const n=new Date(); return Math.round(new Date(n.getFullYear(),n.getMonth(),n.getDate()).getTime()/DAYMS); }
+function markDay(){ const t=today(); if(!Array.isArray(S.days)) S.days=[]; if(!S.days.includes(t)){ S.days.push(t); if(S.days.length>400) S.days=S.days.slice(-400); updateChip(); } }
+function streak(){ const set=new Set(S.days||[]); let t=today(); if(!set.has(t)) t--; let n=0; while(set.has(t)){ n++; t--; } return n; }
+/* Boîtes de Leitner : une question réussie revient après 1, 3, 7, 14, 30 puis 60 jours ; ratée, elle revient le lendemain. */
+const GAPS=[0,1,3,7,14,30,60];
+function boxOf(r){ return r ? (r.box!=null ? r.box : 0) : -1; }
+(function migrate(){ const t=today(); let ch=false;
+  Object.entries(S.q).forEach(([id,r])=>{ if(r.box==null){ r.box = r.last ? Math.min(r.ok||1,3) : 0; const g=GAPS[r.box]; const spread = g ? (parseInt(id.slice(1),36)%(g+1)) : 0; r.due = t + spread; ch=true; } });
+  if(ch) save(); })();
+function dueList(){ const t=today(); return QUIZ.filter(q=>{ const r=S.q[q.id]; return r && r.due!=null && r.due<=t; }); }
+function freshList(){ return QUIZ.filter(q=>!S.q[q.id]); }
+const DAILY_N = 15;
+function dailyPool(){
+  const due = shuffle(dueList()).sort((a,b)=>boxOf(S.q[a.id])-boxOf(S.q[b.id]));
+  const fresh = shuffle(freshList());
+  let l = due.slice(0, fresh.length ? DAILY_N-4 : DAILY_N);
+  l = l.concat(fresh.slice(0, DAILY_N-l.length));
+  if(l.length<DAILY_N){ const rest = QUIZ.filter(q=>!l.includes(q)).sort((a,b)=>(S.q[a.id].due||0)-(S.q[b.id].due||0)); l = l.concat(rest.slice(0,DAILY_N-l.length)); }
+  return shuffle(l);
+}
+function chapPct(k){ const l=QUIZ.filter(q=>q.th===k); const s=statsFor(l); return {n:l.length, seen:s.seen, p: l.length? Math.round(s.ok/l.length*100):0, pSeen: s.seen? Math.round(s.ok/s.seen*100):null}; }
+function ficheDuJour(){
+  const t=today();
+  if(S.fdj && S.fdj.d===t && FICHES.some(f=>f.id===S.fdj.id)) return FICHES.find(f=>f.id===S.fdj.id);
+  const prev = S.fdj ? S.fdj.id : null;
+  const rank = f => { const m=S.fm[f.id]; return m===-1?0 : (S.fv[f.id]==null?1 : (m===1?3:2)); };
+  const cp = {}; CHAPITRES.forEach(([k])=>cp[k]=chapPct(k).p);
+  const list = shuffle(FICHES.filter(f=>f.id!==prev)).sort((a,b)=> rank(a)-rank(b) || (S.fv[a.id]??-1)-(S.fv[b.id]??-1) || cp[a.ch]-cp[b.ch]);
+  const f = list[0]; S.fdj={d:t,id:f.id}; save(); return f;
+}
+function casAuHasard(){
+  const idx = CAS.map((_,i)=>i);
+  const unplayed = idx.filter(i=>S.cas[i]==null);
+  if(unplayed.length) return shuffle(unplayed)[0];
+  const sorted = shuffle(idx).sort((a,b)=>S.cas[a]-S.cas[b]);
+  return sorted[Math.floor(Math.random()*Math.min(3,sorted.length))];
+}
 
 /* ---------- Installation (PWA quand l'appli est hébergée, ex. Netlify) ---------- */
 let deferredPrompt = null;
@@ -1496,22 +1560,16 @@ const standalone = () => { try{ return window.matchMedia("(display-mode: standal
 window.addEventListener("beforeinstallprompt", e => { e.preventDefault(); deferredPrompt = e; if(cur.tab==="accueil") render(); });
 window.addEventListener("appinstalled", () => { S.installDismissed = true; save(); toast("Appli installée"); if(cur.tab==="accueil") render(); });
 
-/* ---------- Compte à rebours ---------- */
-function daysLeft(){
-  const now = new Date();
-  const a = new Date(now.getFullYear(),now.getMonth(),now.getDate());
-  const b = new Date(STAGE.getFullYear(),STAGE.getMonth(),STAGE.getDate());
-  return Math.round((b-a)/86400000);
-}
+/* ---------- Pastille : série de jours ---------- */
 function updateChip(){
-  const d = daysLeft(); const el = $("#chipJ");
-  el.textContent = d>0 ? "J-"+d : (d===0 ? "Jour J" : (d>=-2 ? "En stage" : "Stage fait"));
+  const el = $("#chipJ"); if(!el) return; const n = streak();
+  el.textContent = n ? "Série "+n+" j" : "À toi de jouer";
 }
 
 /* ---------- Statistiques ---------- */
 function statsFor(list){
   let seen=0, ok=0, mastered=0;
-  list.forEach(q=>{ const r=S.q[q.id]; if(r){ seen++; if(r.last) ok++; if(r.ok>=2 && r.last) mastered++; } });
+  list.forEach(q=>{ const r=S.q[q.id]; if(r){ seen++; if(r.last) ok++; if(r.box>=3 && r.last) mastered++; } });
   return {total:list.length, seen, ok, mastered};
 }
 function errorsList(){ return QUIZ.filter(q=>S.q[q.id] && S.q[q.id].last===false); }
@@ -1544,63 +1602,65 @@ function render(){
 }
 
 /* ---------- Accueil ---------- */
-const PLAN = [
-  [8,"Commandement & MGO + Sécurité & zonage","cmd,secu"],
-  [7,"Énergies, feux & TMD + véhicules","ener,veh"],
-  [6,"Gestes de base + stabilisation","gen,stab"],
-  [5,"Ouvertures + tableau de bord","ouv,tdb"],
-  [4,"Reformation + VL sur ses roues","ref,roues"],
-  [3,"VL sur le côté, sur le toit, spécifiques","cote,toit,spe"],
-  [2,"Cas concrets + chiffres clés + pièges","cas"],
-  [1,"Deux examens blancs + mes erreurs","exam"]
-];
 function vAccueil(){
-  const d = daysLeft();
   const st = statsFor(QUIZ);
   const err = errorsList().length;
+  const t = today(); const due = dueList().length; const fresh = freshList().length;
+  const n = streak(); const set = new Set(S.days||[]);
   let html = "";
   if(!standalone() && !S.installDismissed){
     html += `<section class="install" aria-labelledby="instT">
       <div class="ic" aria-hidden="true"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"/><path d="M7 10l5 5 5-5"/><path d="M5 21h14"/></svg></div>
       <div><h3 id="instT">Installer l’appli sur ton téléphone</h3>
-      <p>Pour l’ouvrir d’un geste, comme une vraie appli, même pendant les pauses du stage.</p>
+      <p>Pour l’ouvrir d’un geste, comme une vraie appli, en garde ou entre deux interventions.</p>
       ${deferredPrompt ? `<div class="row"><button class="btn primary" data-act="install">Installer l’appli</button><button class="btn ghost" data-act="dismiss">Plus tard</button></div>`
       : `<ol><li>Sur Android (Chrome, Samsung Internet) : menu <b>⋮</b> puis <b>Installer l’application</b> ou <b>Ajouter à l’écran d’accueil</b>.</li><li>Sur iPhone (Safari) : bouton <b>Partager</b> puis <b>Sur l’écran d’accueil</b>.</li></ol>
       <div class="row"><button class="btn primary" data-act="dismiss">C’est fait</button><button class="btn ghost" data-act="dismiss">Plus tard</button></div>`}
       </div></section>`;
   }
+  let dots=""; for(let i=13;i>=0;i--){ const d=t-i; dots += `<i class="${set.has(d)?"on":""} ${i===0?"now":""}" title="${i===0?"Aujourd’hui":"Il y a "+i+" j"}"></i>`; }
   html += `<section class="hero"><div class="band"></div><div class="in">
-      <div><div class="eyebrow">Stage chef d’agrès SR · intégré SR2</div><h2>Du 4 au 6 novembre</h2><p class="muted" style="margin:6px 0 0">GDO 2025, référentiel départemental, FRO 50 & 51, FMPA 2026.</p></div>
-      <div class="count"><b>${d>0?d:0}</b><span>${d>1?"jours":"jour"}</span></div></div></section>`;
+      <div><div class="eyebrow">Chef d’agrès SR · stage validé le 6 novembre 2026</div><h2>Entretenir mes acquis</h2><p class="muted" style="margin:6px 0 0">Un peu chaque jour : chaque question revient juste avant que tu l’oublies.</p></div>
+      <div class="count"><b>${n}</b><span>${n>1?"jours d’affilée":"jour d’affilée"}</span></div></div>
+      <div style="padding:0 16px 14px"><div class="dots" aria-label="Tes 14 derniers jours">${dots}</div></div></section>`;
+  const doneToday = S.lastDaily===t;
+  html += `<section class="today-card ${doneToday?"done":""}"><div class="eyebrow">${doneToday?"Séance du jour faite":"Séance du jour"}</div>
+      <h3>${doneToday ? (due? "Encore "+due+" question"+(due>1?"s":"")+" à revoir" : "Séance faite, bravo") : DAILY_N+" questions, 5 minutes"}</h3>
+      <p class="sub">${due} à revoir aujourd’hui · ${fresh} jamais vue${fresh>1?"s":""} · les ratées reviennent demain, les réussies de plus en plus tard.</p>
+      <div class="row"><button class="btn ${doneToday?"":"primary"}" data-act="daily">${doneToday?"Refaire une séance":"Lancer ma séance"}</button></div></section>`;
+  const f = ficheDuJour();
+  const m = S.fm[f.id];
+  html += `<button class="fdj" data-fiche="${f.id}"><div class="eyebrow">Fiche du jour · ${esc(CHAP[f.ch])}${m===-1?' <span class="fstat rw">à retravailler</span>':(S.fv[f.id]==null?' <span class="fstat rw" style="background:var(--mark-soft);color:var(--ink)">jamais lue</span>':"")}</div><b>${esc(f.t)}</b><span class="c">${esc(strip(f.cle))}</span></button>`;
+  html += `<section class="quick" aria-label="Raccourcis">
+      <button class="hot" data-act="cas-random"><b>Mise en situation</b><span>Un cas au hasard, tu donnes les ordres</span></button>
+      <button data-act="training"><b>Quiz libre</b><span>Par thème, correction immédiate</span></button>
+      <button data-act="errors" ${err?"":"disabled"}><b>Mes erreurs</b><span>${err?err+" question"+(err>1?"s":"")+" à retravailler":"Rien à revoir pour l’instant"}</span></button>
+      <button data-act="exam"><b>Examen blanc</b><span>30 questions, 40 s chacune</span></button>
+      <button data-act="sudden"><b>Mort subite</b><span>Stop à la première erreur</span></button>
+      <button data-goto="chiffres"><b>Chiffres clés</b><span>${CHIFFRES.length} valeurs à connaître</span></button></section>`;
+  /* Points faibles */
+  const weakCh = CHAPITRES.map(([k,nm])=>Object.assign({k,nm},chapPct(k))).filter(c=>c.n && c.seen>=3 && c.pSeen<70).sort((a,b)=>a.pSeen-b.pSeen).slice(0,4);
+  const weakF = FICHES.filter(x=>S.fm[x.id]===-1);
+  html += `<section><div class="eyebrow">À retravailler en priorité</div><h2 class="sec-title" style="margin:2px 0 10px">Mes points faibles</h2>`;
+  if(!weakCh.length && !weakF.length){
+    html += `<div class="card empty">Rien de signalé. Les thèmes sous 70 % de réussite et les fiches que tu marques « à retravailler » apparaîtront ici.</div>`;
+  } else {
+    html += `<div class="weak">${weakCh.map(c=>`<button data-train="${c.k}"><span>Quiz · ${esc(c.nm)}</span><span class="k">${c.pSeen} % réussi</span></button>`).join("")}${weakF.map(x=>`<button data-fiche="${x.id}"><span>Fiche · ${esc(x.t)}</span><span class="k">${esc(CHAP[x.ch])}</span></button>`).join("")}</div>`;
+  }
+  html += `</section>`;
   html += `<section class="stats" aria-label="Progression">
       <div class="stat"><b>${st.seen}/${st.total}</b><span>questions vues</span></div>
-      <div class="stat"><b>${st.seen?Math.round(st.ok/st.seen*100):0} %</b><span>bonnes réponses</span></div>
-      <div class="stat"><b>${err}</b><span>erreurs à revoir</span></div></section>`;
-  html += `<section class="quick" aria-label="Raccourcis">
-      <button class="hot" data-act="exam"><b>Examen blanc</b><span>30 questions, 40 s chacune, corrigé à la fin</span></button>
-      <button data-act="training"><b>Entraînement</b><span>Par thème, correction immédiate</span></button>
-      <button data-act="errors" ${err?"":"disabled"}><b>Mes erreurs</b><span>${err?err+" question"+(err>1?"s":"")+" à retravailler":"Rien à revoir pour l’instant"}</span></button>
-      <button data-act="sudden"><b>Mort subite</b><span>Toute la banque, stop à la première erreur</span></button>
-      <button data-goto="cas"><b>Cas concrets</b><span>${CAS.length} interventions, tu donnes les ordres</span></button>
-      <button data-goto="chiffres"><b>Chiffres clés</b><span>${CHIFFRES.length} valeurs à connaître par cœur</span></button></section>`;
-  html += `<div class="lane" aria-hidden="true"></div>`;
-  html += `<section><div class="eyebrow">Plan de révision</div><h2 class="sec-title" style="margin:2px 0 10px">8 jours pour être au point</h2><div class="plan">`;
-  PLAN.forEach(([j,t,k])=>{
-    const cls = j===d ? "today" : (j>d ? "past" : "");
-    const act = k==="cas" ? `data-goto="cas"` : (k==="exam" ? `data-act="exam"` : `data-train="${k}"`);
-    html += `<div class="d ${cls}"><span class="j">J-${j}</span><button class="btn ghost" style="justify-content:flex-start;text-align:left;min-height:40px;padding:6px 10px;border:0" ${act}>${esc(t)}</button></div>`;
-  });
-  html += `</div></section>`;
-  html += `<section class="card"><div class="eyebrow">Maîtrise par thème</div><div class="bars" style="margin-top:10px">`;
-  CHAPITRES.forEach(([k,n])=>{
-    const l = QUIZ.filter(q=>q.th===k); if(!l.length) return;
-    const s = statsFor(l); const p = s.seen? Math.round(s.ok/l.length*100) : 0;
-    const c = p<40?"lo":(p<75?"mid":"");
-    html += `<div class="bar"><span class="t">${esc(n)}</span><span class="g"><i class="${c}" style="width:${p}%"></i></span><span class="p">${p} %</span></div>`;
+      <div class="stat"><b>${st.mastered}</b><span>ancrées (revues 3 fois et plus)</span></div>
+      <div class="stat"><b>${st.seen?Math.round(st.ok/st.seen*100):0} %</b><span>bonnes réponses</span></div></section>`;
+  html += `<section class="card"><div class="eyebrow">Maîtrise par thème · touche pour t’entraîner</div><div class="bars" style="margin-top:10px">`;
+  CHAPITRES.forEach(([k,nm])=>{
+    const c = chapPct(k); if(!c.n) return;
+    const cl = c.p<40?"lo":(c.p<75?"mid":"");
+    html += `<button class="bar" data-train="${k}"><span class="t">${esc(nm)}</span><span class="g"><i class="${cl}" style="width:${c.p}%"></i></span><span class="p">${c.p} %</span></button>`;
   });
   html += `</div><p class="muted" style="font-size:13px;margin:12px 0 0">Calcul : questions réussies à la dernière tentative / questions du thème. Ta progression reste sur cet appareil.</p>
     <div class="row" style="margin-top:10px"><button class="btn ghost" data-act="reset">Remettre ma progression à zéro</button></div>
-    ${cur.confirmReset?`<div class="fb ko" style="margin-top:10px"><b class="v">Tout effacer ?</b>Tes réponses, erreurs et scores seront supprimés de cet appareil.<div class="row" style="margin-top:8px"><button class="btn primary" data-act="reset-yes">Oui, effacer</button><button class="btn" data-act="reset-no">Annuler</button></div></div>`:""}
+    ${cur.confirmReset?`<div class="fb ko" style="margin-top:10px"><b class="v">Tout effacer ?</b>Tes réponses, révisions programmées, fiches marquées et scores seront supprimés de cet appareil.<div class="row" style="margin-top:8px"><button class="btn primary" data-act="reset-yes">Oui, effacer</button><button class="btn" data-act="reset-no">Annuler</button></div></div>`:""}
   </section>`;
   return html;
 }
@@ -1609,7 +1669,9 @@ function vAccueil(){
 function vFiches(){
   const chap = cur.chap || "all"; const q = cur.search || "";
   const nq = norm(q);
-  let list = FICHES.filter(f => chap==="all" || f.ch===chap);
+  const ff = cur.ff || "all";
+  const FF = {all:["Toutes",()=>true], rw:["À retravailler",f=>S.fm[f.id]===-1], new:["Jamais lues",f=>S.fv[f.id]==null], ok:["Maîtrisées",f=>S.fm[f.id]===1]};
+  let list = FICHES.filter(f => (chap==="all" || f.ch===chap) && FF[ff][1](f));
   if(nq){
     list = list.filter(f => norm([f.t,f.cle,f.src, f.b.map(b=>b[0]+" "+b[1].join(" ")).join(" "), f.o.join(" "), f.p.join(" ")].join(" ")).includes(nq));
   }
@@ -1617,13 +1679,15 @@ function vFiches(){
   <div class="filters">
     <div class="field"><label for="selChap">Chapitre</label><select id="selChap"><option value="all">Tous les chapitres</option>${CHAPITRES.map(([k,n])=>`<option value="${k}" ${k===chap?"selected":""}>${esc(n)} (${FICHES.filter(f=>f.ch===k).length})</option>`).join("")}</select></div>
     <div class="field"><label for="inSearch">Rechercher une technique, un chiffre, un mot</label><input id="inSearch" type="search" placeholder="ex. étai, 30-60-90, voile, service plug" value="${esc(q)}" autocomplete="off"></div>
-  </div>`;
-  if(!list.length){ return html + `<div class="card empty">Aucune fiche ne contient « ${esc(q)} ». Essaie un mot plus court (ex. « charnière »).</div>`; }
+  </div>
+  <div class="chips" role="group" aria-label="Filtrer par état">${Object.entries(FF).map(([k,[nm,fn]])=>`<button data-ff="${k}" aria-pressed="${ff===k}">${nm} <span class="muted">${FICHES.filter(x=>(chap==="all"||x.ch===chap)&&fn(x)).length}</span></button>`).join("")}</div>
+  ${chap!=="all" && QUIZ.some(x=>x.th===chap) ? `<div class="row"><button class="btn primary" data-train="${chap}">Me tester sur « ${esc(CHAP[chap])} »</button></div>` : ""}`;
+  if(!list.length){ return html + `<div class="card empty">${q ? `Aucune fiche ne contient « ${esc(q)} ». Essaie un mot plus court (ex. « charnière »).` : `Aucune fiche dans ce filtre.`}</div>`; }
   html += `<div class="flist" id="flist">`;
   let last = null;
   list.forEach(f=>{
     if(chap==="all" && f.ch!==last){ html += `<div class="chapter-h">${esc(CHAP[f.ch])}</div>`; last=f.ch; }
-    html += `<button data-fiche="${f.id}"><span><span class="ft">${esc(f.t)}</span><span class="fc">${esc(strip(f.cle))}</span></span><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 6l6 6-6 6"/></svg></button>`;
+    html += `<button data-fiche="${f.id}"><span><span class="ft">${esc(f.t)}${S.fm[f.id]===-1?'<span class="fstat rw">à retravailler</span>':(S.fm[f.id]===1?'<span class="fstat ok">✓</span>':"")}</span><span class="fc">${esc(strip(f.cle))}</span></span><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 6l6 6-6 6"/></svg></button>`;
   });
   return html + `</div>`;
 }
@@ -1631,6 +1695,8 @@ function vFiche(id){
   const f = FICHES.find(x=>x.id===id); if(!f) return vFiches();
   const idx = FICHES.indexOf(f); const prev = FICHES[idx-1], next = FICHES[idx+1];
   const nQ = QUIZ.filter(q=>q.th===f.ch).length;
+  if(S.fv[f.id]!==today()){ S.fv[f.id]=today(); markDay(); save(); }
+  const m = S.fm[f.id];
   let html = `<div class="backbar"><button class="btn ghost" data-act="back-fiches"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 6l-6 6 6 6"/></svg>Fiches</button><span class="pill">${esc(CHAP[f.ch])}</span></div>
   <article class="fiche card"><span class="src">${esc(f.src)}</span><h2>${esc(f.t)}</h2><p class="cle"><span class="mark">${f.cle}</span></p></article>`;
   const pm = (typeof PHOTOMAN!=="undefined") && PHOTOMAN[f.id];
@@ -1640,6 +1706,7 @@ function vFiche(id){
     html += `<section class="ordres"><div class="hd"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M7 4h10v16H7z"/><path d="M10 8h4M10 12h4"/><path d="M12 1v3"/></svg>Ordres du CA, exemples</div>${f.o.map(o=>`<p>${esc(o)}</p>`).join("")}<small>Formulations proposées pour t’entraîner à commander. Adapte-les aux conventions de ton CIS et de ton formateur.</small></section>`;
   }
   if(f.p.length){ html += `<section class="pieges"><div class="hd">Pièges</div><ul>${f.p.map(p=>`<li>${esc(p)}</li>`).join("")}</ul></section>`; }
+  html += `<section class="card"><div class="eyebrow" style="margin-bottom:8px">Où j’en suis sur cette fiche</div><div class="mastery chips"><button class="ok" data-fm="1" aria-pressed="${m===1}">Je maîtrise</button><button class="rw" data-fm="-1" aria-pressed="${m===-1}">À retravailler</button></div><p class="muted" style="font-size:13px;margin:8px 0 0">Les fiches à retravailler remontent en « fiche du jour » et dans tes points faibles.</p></section>`;
   html += `<div class="row">${nQ?`<button class="btn primary" data-train="${f.ch}">Me tester sur « ${esc(CHAP[f.ch])} » (${nQ} q.)</button>`:""}</div>
   <div class="row" style="justify-content:space-between">${prev?`<button class="btn" data-fiche="${prev.id}">‹ ${esc(prev.t)}</button>`:"<span></span>"}${next?`<button class="btn" data-fiche="${next.id}">${esc(next.t)} ›</button>`:""}</div>`;
   return html;
@@ -1648,6 +1715,7 @@ function vFiche(id){
 /* ---------- Quiz : réglages ---------- */
 let setup = {mode:"training", themes:[], n:20};
 const MODES = {
+  jour:["Séance du jour",DAILY_N+" q · révisions dues"],
   training:["Entraînement","Correction immédiate"],
   exam:["Examen blanc","30 q · 40 s · corrigé final"],
   errors:["Mes erreurs","Ce que tu as raté"],
@@ -1672,6 +1740,7 @@ function vQuizSetup(){
 function poolFor(mode){
   const th = setup.themes;
   let base = QUIZ.filter(q=>!th.length || th.includes(q.th));
+  if(mode==="jour") return dailyPool();
   if(mode==="errors") return shuffle(errorsList());
   if(mode==="sudden") return shuffle(QUIZ);
   if(mode==="exam") return shuffle(base).slice(0,30);
@@ -1750,7 +1819,11 @@ function answer(opt, timeout){
   const R=cur.run; const P=R.list[R.i]; if(P.done) return;
   if(opt!=null){ P.picked=[opt]; }
   P.done=true; P.timeout=!!timeout; P.ok = timeout ? false : isCorrect(P);
-  const r = S.q[P.q.id] || {n:0,ok:0,last:null}; r.n++; if(P.ok) r.ok++; r.last=P.ok; S.q[P.q.id]=r; save();
+  const r = S.q[P.q.id] || {n:0,ok:0,last:null,box:0}; r.n++; if(P.ok) r.ok++; r.last=P.ok;
+  if(r.box==null) r.box=0;
+  r.box = P.ok ? Math.min(r.box+1, GAPS.length-1) : 0;
+  r.due = today() + (P.ok ? GAPS[r.box] : 1);
+  S.q[P.q.id]=r; markDay(); save();
   R.answers.push(P);
   stopTimer();
   if(R.mode==="exam"){ next(); return; }
@@ -1766,7 +1839,8 @@ function next(){
 }
 function finish(){
   stopTimer();
-  const R=cur.run; cur={tab:"quiz", result:{mode:R.mode, answers:R.answers, total:R.mode==="sudden"?R.answers.length:R.list.length, t:Math.round((Date.now()-R.t0)/1000)}};
+  const R=cur.run; if(R.mode==="jour" && R.answers.length){ S.lastDaily=today(); save(); }
+  cur={tab:"quiz", result:{mode:R.mode, answers:R.answers, total:R.mode==="sudden"?R.answers.length:R.list.length, t:Math.round((Date.now()-R.t0)/1000)}};
   render(); window.scrollTo(0,0);
 }
 function vResult(){
@@ -1796,6 +1870,8 @@ function vResult(){
 /* ---------- Cas concrets ---------- */
 function vCasList(){
   return `<div><div class="eyebrow">Tu es CA SR · chaque choix est noté</div><h2 class="sec-title">Cas concrets</h2></div>
+  <button class="btn primary" data-act="cas-random" style="min-height:52px;font-size:18px">Mise en situation au hasard</button>
+  <p class="muted" style="font-size:13px;margin:-4px 0 0">Les cas jamais faits passent d’abord, puis ceux où ton score est le plus bas.</p>
   <div class="case-list">${CAS.map((c,i)=>`<button data-cas="${i}"><span class="pill" style="align-self:flex-start">${esc(c.tag)}</span><b>${esc(c.t)}</b><span class="muted" style="font-size:14px">${c.st.length} décisions${S.cas[i]!=null?" · meilleur score "+S.cas[i]+" %":""}</span></button>`).join("")}</div>`;
 }
 function vCas(){
@@ -1934,7 +2010,7 @@ function bind(){
   const v=$("#view");
   v.querySelectorAll("[data-goto]").forEach(b=>b.onclick=()=>go(b.dataset.goto));
   v.querySelectorAll("[data-train]").forEach(b=>b.onclick=()=>{ setup.n=20; startQuiz("training", b.dataset.train.split(",")); });
-  v.querySelectorAll("[data-fiche]").forEach(b=>b.onclick=()=>{ cur.id=b.dataset.fiche; render(); window.scrollTo(0,0); });
+  v.querySelectorAll("[data-fiche]").forEach(b=>b.onclick=()=>{ if(cur.tab!=="fiches"){ cur={tab:"fiches"}; try{ history.replaceState(null,"","#fiches"); }catch(e){} } cur.id=b.dataset.fiche; render(); window.scrollTo(0,0); });
   v.querySelectorAll("[data-mode]").forEach(b=>b.onclick=()=>{ setup.mode=b.dataset.mode; render(); });
   v.querySelectorAll("[data-theme]").forEach(b=>b.onclick=()=>{ const k=b.dataset.theme; setup.themes = setup.themes.includes(k)? setup.themes.filter(x=>x!==k) : setup.themes.concat(k); render(); });
   v.querySelectorAll("[data-n]").forEach(b=>b.onclick=()=>{ setup.n=+b.dataset.n; render(); });
@@ -1945,7 +2021,9 @@ function bind(){
   });
   v.querySelectorAll("[data-seq]").forEach(b=>b.onclick=()=>{ const P=cur.run.list[cur.run.i]; P.seq.push(+b.dataset.seq); render(); });
   v.querySelectorAll("[data-cas]").forEach(b=>b.onclick=()=>{ cur={tab:"cas",cas:+b.dataset.cas,step:0,pts:0,choice:null,order:null}; render(); window.scrollTo(0,0); });
-  v.querySelectorAll("[data-choice]").forEach(b=>b.onclick=()=>{ if(cur.choice!=null) return; cur.choice=+b.dataset.choice; cur.pts+=CAS[cur.cas].st[cur.step].o[cur.choice].v; render(); const fb=$(".fb"); if(fb) fb.scrollIntoView({behavior:"smooth",block:"nearest"}); });
+  v.querySelectorAll("[data-choice]").forEach(b=>b.onclick=()=>{ if(cur.choice!=null) return; cur.choice=+b.dataset.choice; markDay(); save(); cur.pts+=CAS[cur.cas].st[cur.step].o[cur.choice].v; render(); const fb=$(".fb"); if(fb) fb.scrollIntoView({behavior:"smooth",block:"nearest"}); });
+  v.querySelectorAll("[data-ff]").forEach(b=>b.onclick=()=>{ cur.ff=b.dataset.ff; render(); });
+  v.querySelectorAll("[data-fm]").forEach(b=>b.onclick=()=>{ const k=+b.dataset.fm; if(S.fm[cur.id]===k) delete S.fm[cur.id]; else S.fm[cur.id]=k; save(); render(); toast(S.fm[cur.id]===1?"Fiche marquée maîtrisée":S.fm[cur.id]===-1?"Fiche à retravailler":"Marque retirée"); });
   v.querySelectorAll("[data-cm]").forEach(b=>b.onclick=()=>{ cur={tab:"chiffres",cm:b.dataset.cm}; render(); });
   const sel=$("#selChap"); if(sel) sel.onchange=()=>{ cur.chap=sel.value; render(); };
   const ins=$("#inSearch"); if(ins){ ins.oninput=()=>{ cur.search=ins.value; const pos=ins.selectionStart; render(); const n=$("#inSearch"); n.focus(); try{n.setSelectionRange(pos,pos);}catch(e){} }; }
@@ -1960,12 +2038,14 @@ function act(a){
     case "install": if(deferredPrompt){ deferredPrompt.prompt(); deferredPrompt.userChoice.finally(()=>{ deferredPrompt=null; render(); }); } break;
     case "dismiss": S.installDismissed=true; save(); render(); break;
     case "exam": setup.themes=[]; startQuiz("exam"); break;
+    case "daily": startQuiz("jour"); break;
+    case "cas-random": { const i=casAuHasard(); cur={tab:"cas",cas:i,step:0,pts:0,choice:null,order:null}; try{ history.replaceState(null,"","#cas"); }catch(e){} render(); window.scrollTo(0,0); break; }
     case "training": setup.mode="training"; go("quiz"); break;
     case "errors": startQuiz("errors"); break;
     case "sudden": startQuiz("sudden"); break;
     case "reset": cur.confirmReset=true; render(); break;
     case "reset-no": cur.confirmReset=false; render(); break;
-    case "reset-yes": S.q={}; S.cas={}; save(); cur.confirmReset=false; render(); toast("Progression effacée"); break;
+    case "reset-yes": S.q={}; S.cas={}; S.days=[]; S.fm={}; S.fv={}; S.fdj=null; S.lastDaily=null; save(); updateChip(); cur.confirmReset=false; render(); toast("Progression effacée"); break;
     case "back-fiches": cur.id=null; render(); window.scrollTo(0,0); break;
     case "all-themes": setup.themes=[]; render(); break;
     case "start": startQuiz(setup.mode); break;
@@ -1990,6 +2070,7 @@ function toast(msg){ const t=document.createElement("div"); t.className="toast";
 const h = location.hash.slice(1);
 cur.tab = TABS.includes(h) ? h : "accueil";
 render();
+updateChip();
 setInterval(updateChip, 60000);
 })();
 
